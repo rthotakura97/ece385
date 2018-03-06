@@ -17,6 +17,38 @@
          type = "String";
       }
    }
+   element accumulator
+   {
+      datum _sortIndex
+      {
+         value = "8";
+         type = "int";
+      }
+   }
+   element accumulator.s1
+   {
+      datum baseAddress
+      {
+         value = "48";
+         type = "String";
+      }
+   }
+   element clear
+   {
+      datum _sortIndex
+      {
+         value = "9";
+         type = "int";
+      }
+   }
+   element clear.s1
+   {
+      datum baseAddress
+      {
+         value = "32";
+         type = "String";
+      }
+   }
    element clk_0
    {
       datum _sortIndex
@@ -37,7 +69,7 @@
    {
       datum baseAddress
       {
-         value = "32";
+         value = "80";
          type = "String";
       }
    }
@@ -106,7 +138,23 @@
    {
       datum baseAddress
       {
-         value = "48";
+         value = "96";
+         type = "String";
+      }
+   }
+   element switches
+   {
+      datum _sortIndex
+      {
+         value = "7";
+         type = "int";
+      }
+   }
+   element switches.s1
+   {
+      datum baseAddress
+      {
+         value = "64";
          type = "String";
       }
    }
@@ -122,7 +170,7 @@
    {
       datum baseAddress
       {
-         value = "72";
+         value = "120";
          type = "String";
       }
    }
@@ -147,6 +195,16 @@
  <parameter name="timeStamp" value="0" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
+ <interface
+   name="accumulator"
+   internal="accumulator.external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="clear"
+   internal="clear.external_connection"
+   type="conduit"
+   dir="end" />
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
  <interface
    name="led_wire"
@@ -156,6 +214,43 @@
  <interface name="reset" internal="clk_0.clk_in_reset" type="reset" dir="end" />
  <interface name="sdram_clk" internal="sdram_pll.c1" type="clock" dir="start" />
  <interface name="sdram_wire" internal="sdram.wire" type="conduit" dir="end" />
+ <interface
+   name="switches"
+   internal="switches.external_connection"
+   type="conduit"
+   dir="end" />
+ <module
+   name="accumulator"
+   kind="altera_avalon_pio"
+   version="15.0"
+   enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="true" />
+  <parameter name="clockRate" value="50000000" />
+  <parameter name="direction" value="Input" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="1" />
+ </module>
+ <module name="clear" kind="altera_avalon_pio" version="15.0" enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="true" />
+  <parameter name="clockRate" value="50000000" />
+  <parameter name="direction" value="Input" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="1" />
+ </module>
  <module name="clk_0" kind="clock_source" version="15.0" enabled="1">
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="true" />
@@ -200,7 +295,7 @@
   <parameter name="dataAddrWidth" value="29" />
   <parameter name="dataMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="dataMasterHighPerformanceMapParam" value="" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x0' end='0x10' /><slave name='led.s1' start='0x20' end='0x30' /><slave name='sdram_pll.pll_slave' start='0x30' end='0x40' /><slave name='sysid_qsys_0.control_slave' start='0x48' end='0x50' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x1000' end='0x1800' /><slave name='sdram.s1' start='0x10000000' end='0x18000000' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x0' end='0x10' /><slave name='clear.s1' start='0x20' end='0x30' /><slave name='accumulator.s1' start='0x30' end='0x40' /><slave name='switches.s1' start='0x40' end='0x50' /><slave name='led.s1' start='0x50' end='0x60' /><slave name='sdram_pll.pll_slave' start='0x60' end='0x70' /><slave name='sysid_qsys_0.control_slave' start='0x78' end='0x80' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x1000' end='0x1800' /><slave name='sdram.s1' start='0x10000000' end='0x18000000' /></address-map>]]></parameter>
   <parameter name="data_master_high_performance_paddr_base" value="0" />
   <parameter name="data_master_high_performance_paddr_size" value="0" />
   <parameter name="data_master_paddr_base" value="0" />
@@ -239,7 +334,7 @@
   <parameter name="icache_tagramBlockType" value="Automatic" />
   <parameter name="impl" value="Tiny" />
   <parameter name="instAddrWidth" value="29" />
-  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x0' end='0x10' /><slave name='sdram_pll.pll_slave' start='0x30' end='0x40' /><slave name='sysid_qsys_0.control_slave' start='0x48' end='0x50' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x1000' end='0x1800' /><slave name='sdram.s1' start='0x10000000' end='0x18000000' /></address-map>]]></parameter>
+  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x0' end='0x10' /><slave name='sdram_pll.pll_slave' start='0x60' end='0x70' /><slave name='sysid_qsys_0.control_slave' start='0x78' end='0x80' /><slave name='nios2_gen2_0.debug_mem_slave' start='0x1000' end='0x1800' /><slave name='sdram.s1' start='0x10000000' end='0x18000000' /></address-map>]]></parameter>
   <parameter name="instructionMasterHighPerformanceAddrWidth" value="1" />
   <parameter name="instructionMasterHighPerformanceMapParam" value="" />
   <parameter name="instruction_master_high_performance_paddr_base" value="0" />
@@ -400,14 +495,14 @@
   <parameter name="clockRate" value="50000000" />
   <parameter name="columnWidth" value="10" />
   <parameter name="componentName" value="$${FILENAME}_sdram" />
-  <parameter name="dataWidth" value="16" />
+  <parameter name="dataWidth" value="32" />
   <parameter name="generateSimulationModel" value="false" />
   <parameter name="initNOPDelay" value="0.0" />
   <parameter name="initRefreshCommands" value="2" />
   <parameter name="masteredTristateBridgeSlave" value="0" />
   <parameter name="model">single_Micron_MT48LC4M32B2_7_chip</parameter>
   <parameter name="numberOfBanks" value="4" />
-  <parameter name="numberOfChipSelects" value="2" />
+  <parameter name="numberOfChipSelects" value="1" />
   <parameter name="pinsSharedViaTriState" value="false" />
   <parameter name="powerUpDelay" value="200.0" />
   <parameter name="refreshPeriod" value="7.8125" />
@@ -581,6 +676,20 @@
   <parameter name="WIDTH_CLOCK" value="5" />
   <parameter name="WIDTH_PHASECOUNTERSELECT" value="" />
  </module>
+ <module name="switches" kind="altera_avalon_pio" version="15.0" enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="clockRate" value="50000000" />
+  <parameter name="direction" value="Input" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="8" />
+ </module>
  <module
    name="sysid_qsys_0"
    kind="altera_avalon_sysid_qsys"
@@ -595,7 +704,7 @@
    start="nios2_gen2_0.data_master"
    end="sysid_qsys_0.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0048" />
+  <parameter name="baseAddress" value="0x0078" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -613,7 +722,7 @@
    start="nios2_gen2_0.data_master"
    end="sdram_pll.pll_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0030" />
+  <parameter name="baseAddress" value="0x0060" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -622,7 +731,7 @@
    start="nios2_gen2_0.data_master"
    end="led.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0020" />
+  <parameter name="baseAddress" value="0x0050" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -646,10 +755,37 @@
  <connection
    kind="avalon"
    version="15.0"
+   start="nios2_gen2_0.data_master"
+   end="switches.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0040" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.0"
+   start="nios2_gen2_0.data_master"
+   end="accumulator.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0030" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.0"
+   start="nios2_gen2_0.data_master"
+   end="clear.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0020" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="15.0"
    start="nios2_gen2_0.instruction_master"
    end="sysid_qsys_0.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0048" />
+  <parameter name="baseAddress" value="0x0078" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -667,7 +803,7 @@
    start="nios2_gen2_0.instruction_master"
    end="sdram_pll.pll_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0030" />
+  <parameter name="baseAddress" value="0x0060" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -690,8 +826,11 @@
  </connection>
  <connection kind="clock" version="15.0" start="sdram_pll.c0" end="sdram.clk" />
  <connection kind="clock" version="15.0" start="clk_0.clk" end="nios2_gen2_0.clk" />
- <connection kind="clock" version="15.0" start="clk_0.clk" end="led.clk" />
  <connection kind="clock" version="15.0" start="clk_0.clk" end="sysid_qsys_0.clk" />
+ <connection kind="clock" version="15.0" start="clk_0.clk" end="led.clk" />
+ <connection kind="clock" version="15.0" start="clk_0.clk" end="switches.clk" />
+ <connection kind="clock" version="15.0" start="clk_0.clk" end="accumulator.clk" />
+ <connection kind="clock" version="15.0" start="clk_0.clk" end="clear.clk" />
  <connection
    kind="clock"
    version="15.0"
@@ -719,6 +858,17 @@
    version="15.0"
    start="clk_0.clk_reset"
    end="sysid_qsys_0.reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="clk_0.clk_reset"
+   end="switches.reset" />
+ <connection
+   kind="reset"
+   version="15.0"
+   start="clk_0.clk_reset"
+   end="accumulator.reset" />
+ <connection kind="reset" version="15.0" start="clk_0.clk_reset" end="clear.reset" />
  <connection
    kind="reset"
    version="15.0"
