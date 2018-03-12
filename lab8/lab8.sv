@@ -48,6 +48,8 @@ module lab8( input               CLOCK_50,
     
     logic Reset_h, Clk;
     logic [7:0] keycode;
+	 logic [9:0] DrawX, DrawY;
+	 logic is_ball;
     
     assign Clk = CLOCK_50;
     always_ff @ (posedge Clk) begin
@@ -80,7 +82,7 @@ module lab8( input               CLOCK_50,
     );
      
      // You need to make sure that the port names here match the ports in Qsys-generated codes.
-     nios_system nios_system(
+     lab8_soc nios_system(
                              .clk_clk(Clk),         
                              .reset_reset_n(1'b1),    // Never reset NIOS
                              .sdram_wire_addr(DRAM_ADDR), 
@@ -105,15 +107,40 @@ module lab8( input               CLOCK_50,
     
     // Use PLL to generate the 25MHZ VGA_CLK.
     // You will have to generate it on your own in simulation.
-    vga_clk vga_clk_instance(.inclk0(Clk), .c0(VGA_CLK));
+    vga_clk vga_clk_instance(.clk_clk(Clk),
+										.reset_reset_n(1'b1),
+										.altpll_0_c0_clk(VGA_CLK),
+										.altpll_0_areset_conduit_export(),
+										.altpll_0_locked_conduit_export(),
+										.altpll_0_phasedone_conduit_export());
     
     // TODO: Fill in the connections for the rest of the modules 
-    //VGA_controller vga_controller_instance();
+    VGA_controller vga_controller_instance(.Clk,         // 50 MHz clock
+                                           .Reset(reset_h),       // Active-high reset signal
+														 .VGA_HS,      // Horizontal sync pulse.  Active low
+                                           .VGA_VS,      // Vertical sync pulse.  Active low
+														 .VGA_CLK,     // 25 MHz VGA clock input
+														 .VGA_BLANK_N, // Blanking interval indicator.  Active low.
+                                           .VGA_SYNC_N,  // Composite Sync signal.  Active low.  We don't use it in this lab,
+                                                        // but the video DAC on the DE2 board requires an input for it.
+														 .DrawX,       // horizontal coordinate
+                                           .DrawY);
     
     // Which signal should be frame_clk?
-    //ball ball_instance();
+    ball ball_instance(.Clk,                // 50 MHz clock
+														.Reset(reset_h),              // Active-high reset signal
+														.frame_clk(VGA_VS),          // The clock indicating a new frame (~60Hz)
+														.DrawX, 
+														.DrawY,       // Current pixel coordinates
+														.is_ball);
     
-    //color_mapper color_instance();
+    color_mapper color_instance( .is_ball,            // Whether current pixel belongs to ball 
+                                 .DrawX, 
+										   .DrawY,       // Current pixel coordinates
+											.VGA_R, 
+											.VGA_G, 
+											.VGA_B
+	 );
     
     // Display keycode on hex display
     HexDriver hex_inst_0 (keycode[3:0], HEX0);
