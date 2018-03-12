@@ -107,12 +107,7 @@ module lab8( input               CLOCK_50,
     
     // Use PLL to generate the 25MHZ VGA_CLK.
     // You will have to generate it on your own in simulation.
-    vga_clk vga_clk_instance(.clk_clk(Clk),
-										.reset_reset_n(1'b1),
-										.altpll_0_c0_clk(VGA_CLK),
-										.altpll_0_areset_conduit_export(),
-										.altpll_0_locked_conduit_export(),
-										.altpll_0_phasedone_conduit_export());
+    vga_clk vga_clk_instance(.inclk0(Clk), .c0(VGA_CLK));
     
     // TODO: Fill in the connections for the rest of the modules 
     VGA_controller vga_controller_instance(.Clk,         // 50 MHz clock
@@ -132,7 +127,8 @@ module lab8( input               CLOCK_50,
 														.frame_clk(VGA_VS),          // The clock indicating a new frame (~60Hz)
 														.DrawX, 
 														.DrawY,       // Current pixel coordinates
-														.is_ball);
+														.is_ball,
+														.keycode);
     
     color_mapper color_instance( .is_ball,            // Whether current pixel belongs to ball 
                                  .DrawX, 
