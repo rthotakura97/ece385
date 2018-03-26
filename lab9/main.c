@@ -267,6 +267,7 @@ int main()
 			msg_ascii[i] = plaintext_test[i];
 			key_ascii[i] = key_test[i];
 		}
+		//TODO: is key transferring over?
 		encrypt(msg_ascii, key_ascii, msg_enc, key);
 		for (i = 0; i < 4; i++) {
 			printf("key\n");
