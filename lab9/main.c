@@ -12,6 +12,9 @@ University of Illinois ECE Department
 #include <stdio.h>
 #include <time.h>
 #include "aes.h"
+#include "aesutils.h"
+
+#define BYTES 8
 
 // Pointer to base address of AES module, make sure it matches Qsys
 volatile unsigned int * AES_PTR = (unsigned int *) 0x00000100;
@@ -69,6 +72,10 @@ char charsToHex(char c1, char c2)
 void encrypt(unsigned char * msg_ascii, unsigned char * key_ascii, unsigned int * msg_enc, unsigned int * key)
 {
 	// Implement this function
+	
+	// run key expansion to fill w
+	unsigned int *w = malloc(NB * (NR + 1) * BYTES);
+	key_expansion(key_ascii, w);
 }
 
 /** decrypt
