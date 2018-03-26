@@ -168,11 +168,9 @@ void decrypt(unsigned int * msg_enc, unsigned int * msg_dec, unsigned int * key)
 	// run key expansion to fill w
 	unsigned int *w = malloc(NB * (NR + 1) * BYTES);
 	KeyExpansion(key, w, NK);
-	print_key(w);
-	print_key(w+4);
 
 	print_arr(state);
-	add_round_key(state, w);
+	add_round_key(state, w + NR*4);
 	print_arr(state);
 	for (i = NR-1; i > 0; i--) {
 		inv_shift_rows(state);
@@ -182,7 +180,8 @@ void decrypt(unsigned int * msg_enc, unsigned int * msg_dec, unsigned int * key)
 	}
 	inv_shift_rows(state);
 	inv_sub_bytes(state);
-	add_round_key(state, w+NR*4);
+	add_round_key(state, w);
+	print_arr(state);
 
 	for (i = 0; i < 4; i++) {
 		for (j = 0; j < 4; j++) {
@@ -271,6 +270,10 @@ int main()
 		}
 		encrypt(msg_ascii, key_ascii, msg_enc, key);
 		decrypt(msg_enc, msg_dec, key);
+		for(i = 0; i < 4; i++){
+			printf("%08x", msg_dec[i]);
+		}
+		printf("\n");
 		/*
 		// Run Encryption
 		clock_t begin = clock();
