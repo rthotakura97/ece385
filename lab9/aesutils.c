@@ -189,6 +189,52 @@ uint Rcon[]={0x00000000,0x01000000,0x02000000,0x04000000,0x08000000,0x10000000,
 	0x20000000,0x40000000,0x80000000,0x1b000000,0x36000000,0x6c000000,
 	0xd8000000,0xab000000,0x4d000000,0x9a000000};
 
+uint adj_rcon[]={0x00000000,0x00000001,0x00000002,0x00000004,0x00000008,0x00000010,
+	0x00000020,0x00000040,0x00000080,0x0000001b,0x00000036,0x0000006c,
+	0x000000d8,0x000000ab,0x0000004d,0x0000009a};
+
+void mix_columns(unsigned char * state) {
+	for (int i = 0; i < 4; i++) {
+		unsigned char a0 = state[0*4 + i];
+		unsigned char a1 = state[1*4 + i];
+		unsigned char a2 = state[2*4 + i];
+		unsigned char a3 = state[3*4 + i];
+
+		state[0*4 + i] = gf_mul[a0][0] ^ gf_mul[a1][1] ^ a2 ^ a3;
+		state[1*4 + i] = a0 ^ gf_mul[a1][0] ^ gf_mul[a2][1] ^ a3;
+		state[2*4 + i] = a0 ^ a1 ^ gf_mul[a2][0] ^ gf_mul[a3][1];
+		state[3*4 + i] = gf_mul[a0][1] ^ a1 ^ a2 ^ gf_mul[a3][0];
+	}
+}
+
+void shift_rows(unsigned char * state) {
+	int i, j;
+	for (i = 0; i < 4; i++) {
+		for (j = 0; j < i; j++) {
+			unsigned char char0 = state[i*4+0];
+			unsigned char char1 = state[i*4+1];
+			unsigned char char2 = state[i*4+2];
+			unsigned char char3 = state[i*4+3];
+
+			state[i*4+0] = char1;
+			state[i*4+1] = char2;
+			state[i*4+2] = char3;
+			state[i*4+3] = char0;
+		}
+	}
+}
+
+void add_round_key(unsigned char * state, unsigned int * w) {
+	for (int i = 0; i < 4; i++) {
+		unsigned int * keystart = w + i;
+		for (int j = 0; j < 4; j++) {
+			unsigned char key = *((unsigned char *)keystart + j);		
+			unsigned char tmp = state[j*4 + i];
+			state[j*4+i] = tmp ^ key;
+		}
+	}
+}
+
 void sub_bytes(unsigned char * state) {
 	int i;
 
@@ -220,15 +266,22 @@ unsigned int rotate_word(unsigned int in){
 		unsigned char in_i = *((unsigned char *)&in + i);		
 		temp[i] = in_i;
 	}
-	out |= temp[2];
-	out = out << 8;
-	out |= temp[1];
-	out = out << 8;
 	out |= temp[0];
 	out = out << 8;
 	out |= temp[3];
+	out = out << 8;
+	out |= temp[2];
+	out = out << 8;
+	out |= temp[1];
 
 	return out;
+}
+void print_to_char(unsigned int x) {
+	for (int i = 0; i < 4; i++) {
+		unsigned char y = *((unsigned char *)&x + i);
+		printf("%02x ", y);
+	}
+	printf("\n");
 }
 
 void KeyExpansion(unsigned char * key, unsigned int * w, int nk){
@@ -242,13 +295,13 @@ void KeyExpansion(unsigned char * key, unsigned int * w, int nk){
 		unsigned char byte2 = key[4*i+2];
 		unsigned char byte3 = key[4*i+3];
 
-		unsigned int u = byte0;
-		u = u << 8;
-		u |= byte1;
+		unsigned int u = byte3;
 		u = u << 8;
 		u |= byte2;
 		u = u << 8;
-		u |= byte3;
+		u |= byte1;
+		u = u << 8;
+		u |= byte0;
 
 		w[i] = u;
 		i = i + 1;
@@ -259,10 +312,9 @@ void KeyExpansion(unsigned char * key, unsigned int * w, int nk){
 	while(i < (NB*(NR+1))){
 		temp = w[i-1];
 		if (i % NK == 0){
-			temp = sub_word(rotate_word(temp)) ^ Rcon[i/NK];
+			temp = sub_word(rotate_word(temp)) ^ adj_rcon[i/NK];
 		}
 		w[i] = w[i-NK] ^ temp;
 		i = i+1;
 	}
-
 }

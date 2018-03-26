@@ -1,8 +1,7 @@
 /************************************************************************
 Lab 9 Nios Software
 
-Dong Kai Wang, Fall 2017
-Christine Chen, Fall 2013
+Dong Kai Wang, Fall 2017 Christine Chen, Fall 2013
 
 For use with ECE 385 Experiment 9
 University of Illinois ECE Department
@@ -60,6 +59,25 @@ char charsToHex(char c1, char c2)
 	return (hex1 << 4) + hex2;
 }
 
+void print_arr(unsigned char * arr) {
+	printf("state:\n");
+	for (int i = 0; i < 16; i++) {
+		printf("%02x ", arr[i]);
+		if (i % 4 == 3)
+			printf("\n");
+	}
+}
+
+void print_key(unsigned char * arr) {
+	printf("key:\n");
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			printf("%02x ", arr[j*4 + i]);
+		}
+		printf("\n");
+	}
+}
+
 /** encrypt
  *  Perform AES encryption in software.
  *
@@ -70,17 +88,36 @@ char charsToHex(char c1, char c2)
  */
 void encrypt(unsigned char * msg_ascii, unsigned char * key_ascii, unsigned int * msg_enc, unsigned int * key)
 {
-	// Implement this function
-	unsigned char msg_mem[16], key_mem[16];
-	int i;
+	unsigned char msg_mem[16], key_mem[16], state[16];
+	int i,j;
 	for (i = 0; i < 16; i++) {
 		msg_mem[i] = charsToHex(msg_ascii[i*2], msg_ascii[i*2+1]);	
 		key_mem[i] = charsToHex(key_ascii[i*2], key_ascii[i*2+1]);	
+	}
+
+	for (i = 0; i < 4; i++) {
+		for (j = 0; j < 4; j++) {
+			state[i*4 + j] = msg_mem[j*4 + i];
+		}
 	}
 	
 	// run key expansion to fill w
 	unsigned int *w = malloc(NB * (NR + 1) * BYTES);
 	KeyExpansion(key_mem, w, NK);
+
+	add_round_key(state, w);
+	for (i = 1; i < NR; i++) {
+		sub_bytes(state);
+		shift_rows(state);
+		mix_columns(state);
+		add_round_key(state, w+i*4);
+	}
+	sub_bytes(state);
+	shift_rows(state);
+	add_round_key(state, w+NR*4);
+
+	msg_enc = (unsigned int *)state;
+	key = w;
 }
 
 /** decrypt
@@ -92,7 +129,24 @@ void encrypt(unsigned char * msg_ascii, unsigned char * key_ascii, unsigned int 
  */
 void decrypt(unsigned int * msg_enc, unsigned int * msg_dec, unsigned int * key)
 {
-	// Implement this function
+	unsigned char msg_mem[16], state[16];
+	int i,j;
+	state = (unsigned char *)msg_enc;
+
+	// run key expansion to fill w
+	unsigned int *w = malloc(NB * (NR + 1) * BYTES);
+	KeyExpansion(key_mem, w, NK);
+
+	add_round_key(state, w);
+	for (i = 1; i < NR; i++) {
+		sub_bytes(state);
+		shift_rows(state);
+		mix_columns(state);
+		add_round_key(state, w+i*4);
+	}
+	sub_bytes(state);
+	shift_rows(state);
+	add_round_key(state, w+NR*4);
 }
 
 void blehbleh(int x){
