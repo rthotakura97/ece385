@@ -135,9 +135,16 @@ int main()
 		int i = 0;
 		int size_KB = 2;
 		// Choose a random Plaintext and Key
+		char plaintext_test[32]  = {'e', 'c', 'e', '2', '9', '8', 'd', 'c', 'e', 'c', 'e', '2', '9', '8', 'd', 
+									'c', 'e', 'c', 'e', '2', '9', '8', 'd', 'c', 'e', 'c', 'e', '2', '9', '8', 'd', 'c'}
+		char key_test[32] = {'0', '0', '0', '1', '0', '2', '0', '3', '0', '4', '0', '5', '0', '6', '0', 
+								'7', '0', '8', '0', '9', '0', 'a', '0', 'b', '0', 'c', '0', 'd', '0', 'e', '0', 'f'};
+		// Choose a random Plaintext and Key
 		for (i = 0; i < 32; i++) {
-			msg_ascii[i] = 'a';
-			key_ascii[i] = 'b';
+			//msg_ascii[i] = 'a';
+			//key_ascii[i] = 'b';
+			msg_ascii[i] = plaintext_test[i];
+			key_ascii[i] = key_test[i];
 		}
 		// Run Encryption
 		clock_t begin = clock();
