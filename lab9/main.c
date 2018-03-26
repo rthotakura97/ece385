@@ -11,7 +11,6 @@ University of Illinois ECE Department
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-#include "aes.h"
 #include "aesutils.h"
 
 #define BYTES 8
@@ -74,8 +73,7 @@ void encrypt(unsigned char * msg_ascii, unsigned char * key_ascii, unsigned int 
 	// Implement this function
 	
 	// run key expansion to fill w
-	unsigned int *w = malloc(NB * (NR + 1) * BYTES);
-	key_expansion(key_ascii, w, NK);
+	//unsigned int *w = malloc(NB * (NR + 1) * BYTES);
 }
 
 /** decrypt
