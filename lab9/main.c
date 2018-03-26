@@ -75,7 +75,7 @@ void encrypt(unsigned char * msg_ascii, unsigned char * key_ascii, unsigned int 
 	
 	// run key expansion to fill w
 	unsigned int *w = malloc(NB * (NR + 1) * BYTES);
-	key_expansion(key_ascii, w);
+	key_expansion(key_ascii, w, NK);
 }
 
 /** decrypt

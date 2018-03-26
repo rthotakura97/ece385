@@ -5,6 +5,6 @@
 #define NB 4
 #define NR 10
 
-void key_expansion(unsigned char key[4 * NB], unsigned int w[4 * (NR + 1)]);
+void KeyExpansion(unsigned char * key, unsigned int * w, int NK);
 
 #endif
