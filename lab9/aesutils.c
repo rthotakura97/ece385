@@ -1,4 +1,6 @@
 #include "aesutils.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 #define uchar unsigned char // 8-bit byte
 #define uint unsigned int // 32-bit word
@@ -198,38 +200,43 @@ void sub_bytes(unsigned char * state) {
 
 unsigned int sub_word(unsigned int in) {
 	int i;
-	unsigned char out[4];
+	unsigned int out = 0;
 
-	for (i = 0; i < 4; i++) {
+	for (i = 3; i >= 0; i--) {
 		unsigned char in_i = *((unsigned char *)&in + i);		
-		out[i] = aes_sbox[in_i];
+		out |= aes_sbox[in_i];
+		if (i != 0) out = out << 8;
 	}
 
-	return (unsigned int)(*out);
+	return out;
 }
 
 unsigned int rotate_word(unsigned int in){
 	int i;
-	unsigned char char_temp[4], char_out[4];
+	unsigned int out = 0;
+	unsigned char temp[4];
 
 	for (i = 0; i < 4; i++) {
-		char_temp[i] = *((unsigned char *)&in + i);
+		unsigned char in_i = *((unsigned char *)&in + i);		
+		temp[i] = in_i;
 	}
+	out |= temp[2];
+	out = out << 8;
+	out |= temp[1];
+	out = out << 8;
+	out |= temp[0];
+	out = out << 8;
+	out |= temp[3];
 
-	char_out[0] = char_temp[1];
-	char_out[1] = char_temp[2];
-	char_out[2] = char_temp[3];
-	char_out[3] = char_temp[0];
-
-	return (unsigned int)(*char_out);
+	return out;
 }
 
 void KeyExpansion(unsigned char * key, unsigned int * w, int nk){
 
-	unsigned char temp;
-	int i =0;
+	unsigned int temp;
+	int i = 0;
 
-	while(i < NK){
+	while (i < NK){
 		unsigned char byte0 = key[4*i];
 		unsigned char byte1 = key[4*i+1];
 		unsigned char byte2 = key[4*i+2];

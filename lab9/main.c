@@ -19,7 +19,7 @@ University of Illinois ECE Department
 volatile unsigned int * AES_PTR = (unsigned int *) 0x00000100;
 
 // Execution mode: 0 for testing, 1 for benchmarking
-int run_mode = 0;
+int run_mode = 1;
 
 /** charToHex
  *  Convert a single character to the 4-bit value it represents.
@@ -71,9 +71,16 @@ char charsToHex(char c1, char c2)
 void encrypt(unsigned char * msg_ascii, unsigned char * key_ascii, unsigned int * msg_enc, unsigned int * key)
 {
 	// Implement this function
+	unsigned char msg_mem[16], key_mem[16];
+	int i;
+	for (i = 0; i < 16; i++) {
+		msg_mem[i] = charsToHex(msg_ascii[i*2], msg_ascii[i*2+1]);	
+		key_mem[i] = charsToHex(key_ascii[i*2], key_ascii[i*2+1]);	
+	}
 	
 	// run key expansion to fill w
-	//unsigned int *w = malloc(NB * (NR + 1) * BYTES);
+	unsigned int *w = malloc(NB * (NR + 1) * BYTES);
+	KeyExpansion(key_mem, w, NK);
 }
 
 /** decrypt
@@ -88,6 +95,8 @@ void decrypt(unsigned int * msg_enc, unsigned int * msg_dec, unsigned int * key)
 	// Implement this function
 }
 
+void blehbleh(int x){
+}
 /** main
  *  Allows the user to enter the message, key, and select execution mode
  *
@@ -102,19 +111,21 @@ int main()
 	unsigned int msg_enc[4];
 	unsigned int msg_dec[4];
 
+	/*
 	printf("Select execution mode: 0 for testing, 1 for benchmarking: ");
 	int x = scanf("%d", &run_mode);
-	printf("%d", x);
+	blehbleh(x);
+	*/
 
 	if (run_mode == 0) {
 		// Continuously Perform Encryption and Decryption
 		while (1) {
 			int i = 0;
 			printf("\nEnter Message:\n");
-			x = scanf("%s", msg_ascii);
+//			x = scanf("%s", msg_ascii);
 			printf("\n");
 			printf("\nEnter Key:\n");
-			x = scanf("%s", key_ascii);
+//			x = scanf("%s", key_ascii);
 			printf("\n");
 			encrypt(msg_ascii, key_ascii, msg_enc, key);
 			printf("\nEncrpted message is: \n");
@@ -136,7 +147,7 @@ int main()
 		int size_KB = 2;
 		// Choose a random Plaintext and Key
 		char plaintext_test[32]  = {'e', 'c', 'e', '2', '9', '8', 'd', 'c', 'e', 'c', 'e', '2', '9', '8', 'd', 
-									'c', 'e', 'c', 'e', '2', '9', '8', 'd', 'c', 'e', 'c', 'e', '2', '9', '8', 'd', 'c'}
+									'c', 'e', 'c', 'e', '2', '9', '8', 'd', 'c', 'e', 'c', 'e', '2', '9', '8', 'd', 'c'};
 		char key_test[32] = {'0', '0', '0', '1', '0', '2', '0', '3', '0', '4', '0', '5', '0', '6', '0', 
 								'7', '0', '8', '0', '9', '0', 'a', '0', 'b', '0', 'c', '0', 'd', '0', 'e', '0', 'f'};
 		// Choose a random Plaintext and Key
@@ -146,6 +157,8 @@ int main()
 			msg_ascii[i] = plaintext_test[i];
 			key_ascii[i] = key_test[i];
 		}
+		encrypt(msg_ascii, key_ascii, msg_enc, key);
+		/*
 		// Run Encryption
 		clock_t begin = clock();
 		for (i = 0; i < size_KB * 64; i++)
@@ -162,6 +175,7 @@ int main()
 		time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 		speed = size_KB / time_spent;
 		printf("Hardware Encryption Speed: %f KB/s \n", speed);
+		*/
 	}
 	return 0;
 }
