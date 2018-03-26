@@ -88,7 +88,7 @@ void print_key(unsigned char * arr) {
  */
 void encrypt(unsigned char * msg_ascii, unsigned char * key_ascii, unsigned int * msg_enc, unsigned int * key)
 {
-	unsigned char msg_mem[16], key_mem[16], state[16];
+	unsigned char msg_mem[16], key_mem[16], state[16], state_t[16];
 	int i,j;
 	for (i = 0; i < 16; i++) {
 		msg_mem[i] = charsToHex(msg_ascii[i*2], msg_ascii[i*2+1]);	
@@ -116,19 +116,25 @@ void encrypt(unsigned char * msg_ascii, unsigned char * key_ascii, unsigned int 
 	shift_rows(state);
 	add_round_key(state, w+NR*4);
 
+	// Store keys and states in human readable format
 	for (i = 0; i < 4; i++) {
-		unsigned char byte0 = state[4*i];
-		unsigned char byte1 = state[4*i+1];
-		unsigned char byte2 = state[4*i+2];
-		unsigned char byte3 = state[4*i+3];
+		for (j = 0; j < 4; j++) {
+			state_t[i*4 + j] = state[j*4 + i];
+		}
+	}
+	for (i = 0; i < 4; i++) {
+		unsigned char byte0 = state_t[4*i];
+		unsigned char byte1 = state_t[4*i+1];
+		unsigned char byte2 = state_t[4*i+2];
+		unsigned char byte3 = state_t[4*i+3];
 
-		unsigned int u = byte3;
-		u = u << 8;
-		u |= byte2;
+		unsigned int u = byte0;
 		u = u << 8;
 		u |= byte1;
 		u = u << 8;
-		u |= byte0;
+		u |= byte2;
+		u = u << 8;
+		u |= byte3;
 
 		msg_enc[i] = u;
 	}
@@ -159,19 +165,28 @@ void encrypt(unsigned char * msg_ascii, unsigned char * key_ascii, unsigned int 
  */
 void decrypt(unsigned int * msg_enc, unsigned int * msg_dec, unsigned int * key)
 {
-	unsigned char msg_mem[16], state_t[16];
+	unsigned char msg_mem[16], state_t[16], temp_state[16], state[16];
 	int i,j;
-	unsigned char * state;
+	unsigned char * q = (unsigned char *)msg_enc;
 
-	state = (unsigned char *)msg_enc;
+	// Change human readable to column forms
+	for (i = 0; i < 4; i++) {
+		temp_state[i*4 + 0] = q[i*4 + 3];	
+		temp_state[i*4 + 1] = q[i*4 + 2];	
+		temp_state[i*4 + 2] = q[i*4 + 1];	
+		temp_state[i*4 + 3] = q[i*4 + 0];	
+	}
+	for (i = 0; i < 4; i++) {
+		for (j = 0; j < 4; j++) {
+			state[i*4 + j] = temp_state[j*4 + i];
+		}
+	}
 
 	// run key expansion to fill w
 	unsigned int *w = malloc(NB * (NR + 1) * BYTES);
-	KeyExpansion(key, w, NK);
+	KeyExpansion((unsigned char *)key, w, NK);
 
-	print_arr(state);
 	add_round_key(state, w + NR*4);
-	print_arr(state);
 	for (i = NR-1; i > 0; i--) {
 		inv_shift_rows(state);
 		inv_sub_bytes(state);
@@ -181,8 +196,8 @@ void decrypt(unsigned int * msg_enc, unsigned int * msg_dec, unsigned int * key)
 	inv_shift_rows(state);
 	inv_sub_bytes(state);
 	add_round_key(state, w);
-	print_arr(state);
 
+	// Flip back to human readable
 	for (i = 0; i < 4; i++) {
 		for (j = 0; j < 4; j++) {
 			state_t[i*4 + j] = state[j*4 + i];
@@ -194,13 +209,13 @@ void decrypt(unsigned int * msg_enc, unsigned int * msg_dec, unsigned int * key)
 		unsigned char byte2 = state_t[4*i+2];
 		unsigned char byte3 = state_t[4*i+3];
 
-		unsigned int u = byte3;
-		u = u << 8;
-		u |= byte2;
+		unsigned int u = byte0;
 		u = u << 8;
 		u |= byte1;
 		u = u << 8;
-		u |= byte0;
+		u |= byte2;
+		u = u << 8;
+		u |= byte3;
 
 		msg_dec[i] = u;
 	}
@@ -222,24 +237,22 @@ int main()
 	unsigned int msg_enc[4];
 	unsigned int msg_dec[4];
 
-	/*
 	printf("Select execution mode: 0 for testing, 1 for benchmarking: ");
 	int x = scanf("%d", &run_mode);
 	blehbleh(x);
-	*/
 
 	if (run_mode == 0) {
 		// Continuously Perform Encryption and Decryption
 		while (1) {
 			int i = 0;
 			printf("\nEnter Message:\n");
-//			x = scanf("%s", msg_ascii);
+			x = scanf("%s", msg_ascii);
 			printf("\n");
 			printf("\nEnter Key:\n");
-//			x = scanf("%s", key_ascii);
+			x = scanf("%s", key_ascii);
 			printf("\n");
 			encrypt(msg_ascii, key_ascii, msg_enc, key);
-			printf("\nEncrpted message is: \n");
+			printf("\nEncrypted message is: \n");
 			for(i = 0; i < 4; i++){
 				printf("%08x", msg_enc[i]);
 			}
