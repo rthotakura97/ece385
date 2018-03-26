@@ -270,24 +270,11 @@ int main()
 		int i = 0;
 		int size_KB = 2;
 		// Choose a random Plaintext and Key
-		char plaintext_test[32]  = {'e', 'c', 'e', '2', '9', '8', 'd', 'c', 'e', 'c', 'e', '2', '9', '8', 'd', 
-									'c', 'e', 'c', 'e', '2', '9', '8', 'd', 'c', 'e', 'c', 'e', '2', '9', '8', 'd', 'c'};
-		char key_test[32] = {'0', '0', '0', '1', '0', '2', '0', '3', '0', '4', '0', '5', '0', '6', '0', 
-								'7', '0', '8', '0', '9', '0', 'a', '0', 'b', '0', 'c', '0', 'd', '0', 'e', '0', 'f'};
 		// Choose a random Plaintext and Key
 		for (i = 0; i < 32; i++) {
-			//msg_ascii[i] = 'a';
-			//key_ascii[i] = 'b';
-			msg_ascii[i] = plaintext_test[i];
-			key_ascii[i] = key_test[i];
+			msg_ascii[i] = 'a';
+			key_ascii[i] = 'b';
 		}
-		encrypt(msg_ascii, key_ascii, msg_enc, key);
-		decrypt(msg_enc, msg_dec, key);
-		for(i = 0; i < 4; i++){
-			printf("%08x", msg_dec[i]);
-		}
-		printf("\n");
-		/*
 		// Run Encryption
 		clock_t begin = clock();
 		for (i = 0; i < size_KB * 64; i++)
@@ -304,7 +291,6 @@ int main()
 		time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 		speed = size_KB / time_spent;
 		printf("Hardware Encryption Speed: %f KB/s \n", speed);
-		*/
 	}
 	return 0;
 }
