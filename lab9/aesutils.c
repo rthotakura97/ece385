@@ -207,6 +207,20 @@ void mix_columns(unsigned char * state) {
 	}
 }
 
+void inv_mix_columns(unsigned char * state) {
+	for (int i = 0; i < 4; i++) {
+		unsigned char a0 = state[0*4 + i];
+		unsigned char a1 = state[1*4 + i];
+		unsigned char a2 = state[2*4 + i];
+		unsigned char a3 = state[3*4 + i];
+
+		state[0*4 + i] = gf_mul[a0][5] ^ gf_mul[a1][3] ^ gf_mul[a2][4] ^ gf_mul[a3][2];
+		state[1*4 + i] = gf_mul[a0][2] ^ gf_mul[a1][5] ^ gf_mul[a2][3] ^ gf_mul[a3][4];
+		state[2*4 + i] = gf_mul[a0][4] ^ gf_mul[a1][2] ^ gf_mul[a2][5] ^ gf_mul[a3][3];
+		state[3*4 + i] = gf_mul[a0][3] ^ gf_mul[a1][4] ^ gf_mul[a2][2] ^ gf_mul[a3][5];
+	}
+}
+
 void shift_rows(unsigned char * state) {
 	int i, j;
 	for (i = 0; i < 4; i++) {
@@ -220,6 +234,23 @@ void shift_rows(unsigned char * state) {
 			state[i*4+1] = char2;
 			state[i*4+2] = char3;
 			state[i*4+3] = char0;
+		}
+	}
+}
+
+void inv_shift_rows(unsigned char * state) {
+	int i, j;
+	for (i = 0; i < 4; i++) {
+		for (j = 0; j < i; j++) {
+			unsigned char char0 = state[i*4+0];
+			unsigned char char1 = state[i*4+1];
+			unsigned char char2 = state[i*4+2];
+			unsigned char char3 = state[i*4+3];
+
+			state[i*4+0] = char3;
+			state[i*4+1] = char0;
+			state[i*4+2] = char1;
+			state[i*4+3] = char2;
 		}
 	}
 }
@@ -241,6 +272,15 @@ void sub_bytes(unsigned char * state) {
 	for (i = 0; i < 4 * NB; i++) {
 		unsigned char temp = state[i];
 		state[i] = aes_sbox[temp];
+	}
+}
+
+void inv_sub_bytes(unsigned char * state) {
+	int i;
+
+	for (i = 0; i < 4 * NB; i++) {
+		unsigned char temp = state[i];
+		state[i] = aes_invsbox[temp];
 	}
 }
 

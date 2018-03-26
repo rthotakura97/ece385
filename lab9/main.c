@@ -116,8 +116,38 @@ void encrypt(unsigned char * msg_ascii, unsigned char * key_ascii, unsigned int 
 	shift_rows(state);
 	add_round_key(state, w+NR*4);
 
-	msg_enc = (unsigned int *)state;
-	key = w;
+	for (i = 0; i < 4; i++) {
+		unsigned char byte0 = state[4*i];
+		unsigned char byte1 = state[4*i+1];
+		unsigned char byte2 = state[4*i+2];
+		unsigned char byte3 = state[4*i+3];
+
+		unsigned int u = byte3;
+		u = u << 8;
+		u |= byte2;
+		u = u << 8;
+		u |= byte1;
+		u = u << 8;
+		u |= byte0;
+
+		msg_enc[i] = u;
+	}
+	for (i = 0; i < 4; i++) {
+		unsigned char byte0 = w[4*i];
+		unsigned char byte1 = w[4*i+1];
+		unsigned char byte2 = w[4*i+2];
+		unsigned char byte3 = w[4*i+3];
+
+		unsigned int u = byte3;
+		u = u << 8;
+		u |= byte2;
+		u = u << 8;
+		u |= byte1;
+		u = u << 8;
+		u |= byte0;
+
+		key[i] = u;
+	}
 }
 
 /** decrypt
@@ -129,24 +159,50 @@ void encrypt(unsigned char * msg_ascii, unsigned char * key_ascii, unsigned int 
  */
 void decrypt(unsigned int * msg_enc, unsigned int * msg_dec, unsigned int * key)
 {
-	unsigned char msg_mem[16], state[16];
+	unsigned char msg_mem[16], state_t[16];
 	int i,j;
+	unsigned char * state;
+
 	state = (unsigned char *)msg_enc;
+	print_arr(state);
 
 	// run key expansion to fill w
 	unsigned int *w = malloc(NB * (NR + 1) * BYTES);
 	KeyExpansion(key_mem, w, NK);
 
 	add_round_key(state, w);
-	for (i = 1; i < NR; i++) {
-		sub_bytes(state);
-		shift_rows(state);
-		mix_columns(state);
+	for (i = NR-1; i > 0; i--) {
+		inv_shift_rows(state);
+		inv_sub_bytes(state);
 		add_round_key(state, w+i*4);
+		inv_mix_columns(state);
 	}
-	sub_bytes(state);
-	shift_rows(state);
+	inv_shift_rows(state);
+	inv_sub_bytes(state);
 	add_round_key(state, w+NR*4);
+	print_arr(state);
+
+	for (i = 0; i < 4; i++) {
+		for (j = 0; j < 4; j++) {
+			state_t[i*4 + j] = state[j*4 + i];
+		}
+	}
+	for (i = 0; i < 4; i++) {
+		unsigned char byte0 = state_t[4*i];
+		unsigned char byte1 = state_t[4*i+1];
+		unsigned char byte2 = state_t[4*i+2];
+		unsigned char byte3 = state_t[4*i+3];
+
+		unsigned int u = byte3;
+		u = u << 8;
+		u |= byte2;
+		u = u << 8;
+		u |= byte1;
+		u = u << 8;
+		u |= byte0;
+
+		msg_dec[i] = u;
+	}
 }
 
 void blehbleh(int x){
@@ -212,6 +268,11 @@ int main()
 			key_ascii[i] = key_test[i];
 		}
 		encrypt(msg_ascii, key_ascii, msg_enc, key);
+		for (i = 0; i < 4; i++) {
+			printf("key\n");
+			printf("%08x\n", key[i]);
+		}
+		decrypt(msg_enc, msg_dec, key);
 		/*
 		// Run Encryption
 		clock_t begin = clock();
