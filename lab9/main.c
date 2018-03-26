@@ -105,17 +105,18 @@ int main()
 	unsigned int msg_dec[4];
 
 	printf("Select execution mode: 0 for testing, 1 for benchmarking: ");
-	scanf("%d", &run_mode);
+	int x = scanf("%d", &run_mode);
+	printf("%d", x);
 
 	if (run_mode == 0) {
 		// Continuously Perform Encryption and Decryption
 		while (1) {
 			int i = 0;
 			printf("\nEnter Message:\n");
-			scanf("%s", msg_ascii);
+			x = scanf("%s", msg_ascii);
 			printf("\n");
 			printf("\nEnter Key:\n");
-			scanf("%s", key_ascii);
+			x = scanf("%s", key_ascii);
 			printf("\n");
 			encrypt(msg_ascii, key_ascii, msg_enc, key);
 			printf("\nEncrpted message is: \n");
