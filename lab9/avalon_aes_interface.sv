@@ -55,6 +55,7 @@ begin
 				register_file[AVL_ADDR][15:8] <= AVL_WRITEDATA[15:8];
 			if(AVL_BYTE_EN[0])
 				register_file[AVL_ADDR][7:0] <= AVL_WRITEDATA[7:0];
+		end
 end
 
 
