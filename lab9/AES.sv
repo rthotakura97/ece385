@@ -50,6 +50,14 @@ module AES (
 // This will pull from the state and write back to the state
 
 // state machine
+// Input: CLK, AES_START, RESET
+// Output: StateRegister Mux signal [2:0],
+// 		   MixCols Mux Signal [2:0],
+// 		   MixCols byte enable,
+// 		   Round number, 
+// 		   AES_DONE
+//
+//
 
 endmodule
 
