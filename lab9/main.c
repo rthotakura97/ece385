@@ -165,60 +165,25 @@ void encrypt(unsigned char * msg_ascii, unsigned char * key_ascii, unsigned int 
  */
 void decrypt(unsigned int * msg_enc, unsigned int * msg_dec, unsigned int * key)
 {
-	unsigned char msg_mem[16], state_t[16], temp_state[16], state[16];
-	int i,j;
-	unsigned char * q = (unsigned char *)msg_enc;
+	AES_PTR[0] = key[0];
+	AES_PTR[1] = key[1];
+	AES_PTR[2] = key[2];
+	AES_PTR[3] = key[3];
 
-	// Change human readable to column forms
-	for (i = 0; i < 4; i++) {
-		temp_state[i*4 + 0] = q[i*4 + 3];	
-		temp_state[i*4 + 1] = q[i*4 + 2];	
-		temp_state[i*4 + 2] = q[i*4 + 1];	
-		temp_state[i*4 + 3] = q[i*4 + 0];	
-	}
-	for (i = 0; i < 4; i++) {
-		for (j = 0; j < 4; j++) {
-			state[i*4 + j] = temp_state[j*4 + i];
-		}
-	}
+	AES_PTR[4] = msg_enc[0];
+	AES_PTR[5] = msg_enc[1];
+	AES_PTR[6] = msg_enc[2];
+	AES_PTR[7] = msg_enc[3];
 
-	// run key expansion to fill w
-	unsigned int *w = malloc(NB * (NR + 1) * BYTES);
-	KeyExpansion((unsigned char *)key, w, NK);
+	AES_PTR[14] = 1;
+	while(AES_PTR[15] = 0);
 
-	add_round_key(state, w + NR*4);
-	for (i = NR-1; i > 0; i--) {
-		inv_shift_rows(state);
-		inv_sub_bytes(state);
-		add_round_key(state, w+i*4);
-		inv_mix_columns(state);
-	}
-	inv_shift_rows(state);
-	inv_sub_bytes(state);
-	add_round_key(state, w);
+	msg_dec[0] = AES_PTR[8];
+	msg_dec[1] = AES_PTR[9];
+	msg_dec[2] = AES_PTR[10];
+	msg_dec[3] = AES_PTR[11];
 
-	// Flip back to human readable
-	for (i = 0; i < 4; i++) {
-		for (j = 0; j < 4; j++) {
-			state_t[i*4 + j] = state[j*4 + i];
-		}
-	}
-	for (i = 0; i < 4; i++) {
-		unsigned char byte0 = state_t[4*i];
-		unsigned char byte1 = state_t[4*i+1];
-		unsigned char byte2 = state_t[4*i+2];
-		unsigned char byte3 = state_t[4*i+3];
-
-		unsigned int u = byte0;
-		u = u << 8;
-		u |= byte1;
-		u = u << 8;
-		u |= byte2;
-		u = u << 8;
-		u |= byte3;
-
-		msg_dec[i] = u;
-	}
+	AES_PTR[14] = 0;
 }
 
 void blehbleh(int x){
