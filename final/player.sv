@@ -47,7 +47,8 @@ module player (input Clk,
 		begin
 			case (keycode)
 				8'd80: player_X_Motion_in = (~(player_X_Step) + 1'b1);//left
-				8'd79: player_X_Motion_in = player_X_Step;
+				8'd79: player_X_Motion_in = player_X_Step;//right
+				default:player_X_Motion_in = 0;
 		end
 
 		if (player_X_Pos + player_Size >= player_X_Max) 
