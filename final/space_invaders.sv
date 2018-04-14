@@ -49,8 +49,9 @@ module space_invaders( input               CLOCK_50,
     logic Reset_h, Clk;
     logic [7:0] keycode;
 	 logic [9:0] DrawX, DrawY;
-	 logic is_ball;
-    
+	 logic is_player;
+    logic [9:0] player_X_Pos, player_Y_Pos;
+	 
     assign Clk = CLOCK_50;
     always_ff @ (posedge Clk) begin
         Reset_h <= ~(KEY[0]);        // The push buttons are active low
@@ -82,7 +83,7 @@ module space_invaders( input               CLOCK_50,
     );
      
      // You need to make sure that the port names here match the ports in Qsys-generated codes.
-     lab8_soc nios_system(
+     final_soc nios_system(
                              .clk_clk(Clk),         
                              .reset_reset_n(1'b1),    // Never reset NIOS
                              .sdram_wire_addr(DRAM_ADDR), 
@@ -120,17 +121,18 @@ module space_invaders( input               CLOCK_50,
                                                         // but the video DAC on the DE2 board requires an input for it.
 														 .DrawX,       // horizontal coordinate
                                            .DrawY);
+	 
+	 player player_instance(.Clk,
+									.Reset(reset_h),
+									.frame_clk(VGA_HS),
+									.keycode,
+									.DrawX,
+									.DrawY,
+									.player_X_Pos,
+									.player_Y_Pos,
+									.is_player);
     
-    // Which signal should be frame_clk?
-    ball ball_instance(.Clk,                // 50 MHz clock
-														.Reset(reset_h),              // Active-high reset signal
-														.frame_clk(VGA_VS),          // The clock indicating a new frame (~60Hz)
-														.DrawX, 
-														.DrawY,       // Current pixel coordinates
-														.is_ball,
-														.keycode);
-    
-    color_mapper color_instance( .is_ball,            // Whether current pixel belongs to ball 
+    color_mapper color_instance( .is_player,            // Whether current pixel belongs to ball 
                                  .DrawX, 
 										   .DrawY,       // Current pixel coordinates
 											.VGA_R, 

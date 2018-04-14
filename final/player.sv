@@ -2,7 +2,9 @@ module player (input Clk,
 					 Reset,
 					 frame_clk,
 			   input [7:0] keycode,
-			   output logic [9:0] player_X_Pos, player_Y_Pos
+				input [9:0] DrawX, DrawY,
+			   output logic [9:0] player_X_Pos, player_Y_Pos,
+				output is_player
 		   );
 
 
@@ -19,7 +21,7 @@ module player (input Clk,
 	logic frame_clk_delayed, frame_clk_rising_edge;
 	always_ff @ (posedge Clk) begin
 		frame_clk_delayed <= frame_clk;
-		framce_clk_rising_edge <= (framce_clk == 1'b1) && (frame_clk_delayed == 1'b0);
+		frame_clk_rising_edge <= (frame_clk == 1'b1) && (frame_clk_delayed == 1'b0);
 	end
 
 	always_ff @ (posedge Clk)
@@ -49,7 +51,7 @@ module player (input Clk,
 				8'd80: player_X_Motion_in = (~(player_X_Step) + 1'b1);//left
 				8'd79: player_X_Motion_in = player_X_Step;//right
 				default:player_X_Motion_in = 0;
-		end
+			endcase
 
 		if (player_X_Pos + player_Size >= player_X_Max) 
 			player_X_Motion_in = 0;
@@ -59,5 +61,19 @@ module player (input Clk,
 		player_X_Pos_in = player_X_Pos + player_X_Motion;
 		end
 	end
+	
+	int DistX, DistY, Size;
+   assign DistX = DrawX - player_X_Pos;
+   assign DistY = DrawY - player_Y_Pos;
+   assign Size = player_Size;
+   always_comb begin
+        if ( ( DistX*DistX + DistY*DistY) <= (Size*Size) ) 
+            is_player = 1'b1;
+        else
+            is_player = 1'b0;
+        /* The ball's (pixelated) circle is generated using the standard circle formula.  Note that while 
+           the single line is quite powerful descriptively, it causes the synthesis tool to use up three
+           of the 12 available multipliers on the chip! */
+    end
 
 endmodule
