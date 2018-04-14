@@ -13,7 +13,7 @@
 //-------------------------------------------------------------------------
 
 
-module lab8( input               CLOCK_50,
+module space_invaders( input               CLOCK_50,
              input        [3:0]  KEY,          //bit 0 is set up as Reset
              output logic [6:0]  HEX0, HEX1,
              // VGA Interface 
