@@ -49,7 +49,7 @@ module space_invaders( input               CLOCK_50,
     logic Reset_h, Clk;
     logic [7:0] keycode;
 	 logic [9:0] DrawX, DrawY;
-	 logic is_player;
+	 logic is_player, is_missle;
     logic [9:0] player_X_Pos, player_Y_Pos;
 	 
     assign Clk = CLOCK_50;
@@ -131,8 +131,11 @@ module space_invaders( input               CLOCK_50,
 									.player_X_Pos,
 									.player_Y_Pos,
 									.is_player);
+	player_projectile missle(.Clk, .Reset(reset_h), .frame_clk(VGA_VS),
+							 .player_x_pos(player_X_Pos), .player_Y_Pos(player_Y_Pos), .keycode, .is_missle);
     
     color_mapper color_instance( .is_player,            // Whether current pixel belongs to ball 
+								 .is_missle,
                                  .DrawX, 
 										   .DrawY,       // Current pixel coordinates
 											.VGA_R, 
