@@ -9,7 +9,7 @@ module player (input Clk,
 
 
     parameter [9:0] player_X_Center = 10'd320;  // Center position on the X axis
-    parameter [9:0] player_Y_Center = 10'd240;  // Center position on the Y axis
+    parameter [9:0] player_Y_Center = 10'd450;  // Center position on the Y axis
     parameter [9:0] player_X_Min = 10'd0;       // Leftmost point on the X axis
     parameter [9:0] player_X_Max = 10'd639;     // Rightmost point on the X axis
 	//TODO: Determine size and shape of the player

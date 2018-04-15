@@ -5,16 +5,18 @@ module player_projectile (input Clk,
 								input [9:0] DrawX, DrawY,
 						  input [9:0] player_x_pos, player_y_pos,
 						  input [7:0] keycode,
-						  output is_missile, is_showing
+						  output is_missile, is_showing,
+						  output [9:0] projectile_y_pos
 					  );
 
-	parameter [9:0] projectile_step = ~(10'd6) + 1'b1;
+	parameter [9:0] projectile_step = ~(10'd1) + 1'b1;
 	parameter [9:0] projectile_size = 10'd3;
 	parameter [9:0] projectile_y_min = 10'd0;
 
-	logic [9:0] projectile_y_motion, projectile_x_pos, projectile_x_pos_in, projectile_y_pos, projectile_y_pos_in,
+	logic [9:0] projectile_y_motion, projectile_x_pos, projectile_x_pos_in, projectile_y_pos_in,
 		projectile_y_motion_in;
-
+	//logic [9:0] projectile_y_pos;
+		
 	//logic is_showing;
 	logic is_showing_in;
 
@@ -53,7 +55,7 @@ module player_projectile (input Clk,
 		begin
 			if (is_showing == 1'b1) // Moving up
 			begin
-				if (projectile_y_pos < projectile_y_min) // Missle stops
+				if (projectile_y_pos <= projectile_y_min + projectile_size) // Missle stops
 				begin
 					is_showing_in = 1'b0;
 					projectile_y_motion_in = 10'b0;
@@ -65,17 +67,17 @@ module player_projectile (input Clk,
 					projectile_y_motion_in = projectile_step;
 					projectile_y_pos_in = projectile_y_pos + projectile_y_motion;
 				end
+
 			end
-			else if (shoot == 1)//(keycode == 8'h2c) // Start moving
+			else if (keycode == 8'h2c) // Start moving
 			begin
 				is_showing_in = 1'b1;
 				projectile_x_pos_in = player_x_pos;
 				projectile_y_pos_in = player_y_pos;
 				projectile_y_motion_in = projectile_step;
 			end
+
 		end
-
-
 	end
 
 	int DistX, DistY, Size;
@@ -84,7 +86,7 @@ module player_projectile (input Clk,
    assign Size = projectile_size;
 	always_comb
 	begin
-		if (is_showing) begin
+		if (is_showing == 1'b1) begin
 			if ( ( DistX*DistX + DistY*DistY) <= (Size*Size) ) 
 				is_missile = 1'b1;
 			else

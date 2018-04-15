@@ -31,20 +31,21 @@ module  color_mapper ( input              is_player,            // Whether curre
     // Assign color based on is_ball signal
     always_comb
     begin
-        if (is_player == 1'b1) 
+		if (is_missile == 1'b1)
+		begin
+			// Red Ball
+            Red = 8'hff;
+            Green = 8'h0;
+            Blue = 8'h0;
+		end
+        else if (is_player == 1'b1) 
         begin
             // White ball
             Red = 8'hff;
             Green = 8'hff;
             Blue = 8'hff;
         end
-		else if (is_missile == 1'b1)
-		begin
-			// Red Ball
-            Red = 8'hff;
-            Green = 8'hff;
-            Blue = 8'hff;
-		end
+		
         else 
         begin
             // Background with nice color gradient

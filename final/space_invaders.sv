@@ -51,6 +51,7 @@ module space_invaders( input               CLOCK_50,
 	 logic [9:0] DrawX, DrawY;
 	 logic is_player, is_missile, is_showing;
     logic [9:0] player_X_Pos, player_Y_Pos;
+	 logic [9:0] projectile_y_pos;
 	 
     assign Clk = CLOCK_50;
     always_ff @ (posedge Clk) begin
@@ -133,11 +134,11 @@ module space_invaders( input               CLOCK_50,
 									.player_Y_Pos,
 									.is_player);
 									
-	player_projectile missile(.Clk, .shoot, .Reset(reset_h), .frame_clk(VGA_VS),
-							 .player_x_pos(player_X_Pos), .player_y_pos(player_Y_Pos), .keycode, .is_missile, .is_showing);
+	player_projectile missile(.Clk, .shoot, .Reset(reset_h), .frame_clk(VGA_VS), .DrawX, .DrawY,
+							 .player_x_pos(player_X_Pos), .player_y_pos(player_Y_Pos), .keycode, .is_missile, .is_showing, .projectile_y_pos);
     
     color_mapper color_instance( .is_player,            // Whether current pixel belongs to ball 
-								 .is_missile,
+											.is_missile,
                                  .DrawX, 
 										   .DrawY,       // Current pixel coordinates
 											.VGA_R, 
@@ -146,8 +147,8 @@ module space_invaders( input               CLOCK_50,
 	 );
     
     // Display keycode on hex display
-    HexDriver hex_inst_0 ({{7'b0}, {is_showing}}, HEX0);
-    HexDriver hex_inst_1 (8'b0, HEX1);
+    HexDriver hex_inst_0 (projectile_y_pos[3:0], HEX0);
+    HexDriver hex_inst_1 (projectile_y_pos[7:4], HEX1);
     
     /**************************************************************************************
         ATTENTION! Please answer the following quesiton in your lab report! Points will be allocated for the answers!
