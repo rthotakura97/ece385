@@ -50,6 +50,7 @@ module player_projectile (input Clk,
 			if (is_showing) // Moving up
 			begin
 				projectile_y_motion_in = projectile_step;
+				projectile_y_pos_in = player_y_pos + player_y_motion;
 			end
 			else if (keycode == 8'h2c) // Start moving
 			begin
