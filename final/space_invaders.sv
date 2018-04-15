@@ -49,7 +49,7 @@ module space_invaders( input               CLOCK_50,
     logic reset_h, Clk, shoot;
     logic [7:0] keycode;
 	 logic [9:0] DrawX, DrawY;
-	 logic is_player, is_missile, is_showing;
+	 logic is_player, is_missile, is_showing, is_alien;
     logic [9:0] player_X_Pos, player_Y_Pos;
 	 logic [9:0] projectile_y_pos;
 	 
@@ -136,9 +136,12 @@ module space_invaders( input               CLOCK_50,
 									
 	player_projectile missile(.Clk, .shoot, .Reset(reset_h), .frame_clk(VGA_VS), .DrawX, .DrawY,
 							 .player_x_pos(player_X_Pos), .player_y_pos(player_Y_Pos), .keycode, .is_missile, .is_showing, .projectile_y_pos);
+
+	alien alien1(.Clk, .Reset(reset_h), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd20), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien);
     
     color_mapper color_instance( .is_player,            // Whether current pixel belongs to ball 
 											.is_missile,
+											.is_alien,
                                  .DrawX, 
 										   .DrawY,       // Current pixel coordinates
 											.VGA_R, 
