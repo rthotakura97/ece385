@@ -46,15 +46,16 @@ module space_invaders( input               CLOCK_50,
                                  DRAM_CLK      //SDRAM Clock
                     );
     
-    logic Reset_h, Clk;
+    logic reset_h, Clk, shoot;
     logic [7:0] keycode;
 	 logic [9:0] DrawX, DrawY;
-	 logic is_player, is_missle;
+	 logic is_player, is_missile, is_showing;
     logic [9:0] player_X_Pos, player_Y_Pos;
 	 
     assign Clk = CLOCK_50;
     always_ff @ (posedge Clk) begin
-        Reset_h <= ~(KEY[0]);        // The push buttons are active low
+        reset_h <= ~(KEY[0]);        // The push buttons are active low
+		  shoot <= ~(KEY[3]);
     end
     
     logic [1:0] hpi_addr;
@@ -64,7 +65,7 @@ module space_invaders( input               CLOCK_50,
     // Interface between NIOS II and EZ-OTG chip
     hpi_io_intf hpi_io_inst(
                             .Clk(Clk),
-                            .Reset(Reset_h),
+                            .Reset(reset_h),
                             // signals connected to NIOS II
                             .from_sw_address(hpi_addr),
                             .from_sw_data_in(hpi_data_in),
@@ -131,11 +132,12 @@ module space_invaders( input               CLOCK_50,
 									.player_X_Pos,
 									.player_Y_Pos,
 									.is_player);
-	player_projectile missle(.Clk, .Reset(reset_h), .frame_clk(VGA_VS),
-							 .player_x_pos(player_X_Pos), .player_Y_Pos(player_Y_Pos), .keycode, .is_missle);
+									
+	player_projectile missile(.Clk, .shoot, .Reset(reset_h), .frame_clk(VGA_VS),
+							 .player_x_pos(player_X_Pos), .player_y_pos(player_Y_Pos), .keycode, .is_missile, .is_showing);
     
     color_mapper color_instance( .is_player,            // Whether current pixel belongs to ball 
-								 .is_missle,
+								 .is_missile,
                                  .DrawX, 
 										   .DrawY,       // Current pixel coordinates
 											.VGA_R, 
@@ -144,8 +146,8 @@ module space_invaders( input               CLOCK_50,
 	 );
     
     // Display keycode on hex display
-    HexDriver hex_inst_0 (keycode[3:0], HEX0);
-    HexDriver hex_inst_1 (keycode[7:4], HEX1);
+    HexDriver hex_inst_0 ({{7'b0}, {is_showing}}, HEX0);
+    HexDriver hex_inst_1 (8'b0, HEX1);
     
     /**************************************************************************************
         ATTENTION! Please answer the following quesiton in your lab report! Points will be allocated for the answers!
