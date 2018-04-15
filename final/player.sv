@@ -13,7 +13,7 @@ module player (input Clk,
     parameter [9:0] player_X_Min = 10'd0;       // Leftmost point on the X axis
     parameter [9:0] player_X_Max = 10'd639;     // Rightmost point on the X axis
 	//TODO: Determine size and shape of the player
-    parameter [9:0] player_X_Step = 10'd1;      // Step size on the X axis
+    parameter [9:0] player_X_Step = 10'd2;      // Step size on the X axis
     parameter [9:0] player_Size = 10'd4;        // player size
 
 	logic [9:0] player_X_Motion, player_X_Pos_in, player_X_Motion_in;
@@ -53,10 +53,10 @@ module player (input Clk,
 				default:player_X_Motion_in = 0;
 			endcase
 
-		if (player_X_Pos + player_Size >= player_X_Max) 
+		/*if (player_X_Pos + player_Size >= player_X_Max) 
 			player_X_Motion_in = 0;
 		else if (player_X_Pos <= player_X_Min + player_Size)
-			player_X_Motion_in = 0;
+			player_X_Motion_in = 0;*/
 		
 		player_X_Pos_in = player_X_Pos + player_X_Motion;
 		end

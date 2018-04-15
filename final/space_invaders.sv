@@ -124,7 +124,7 @@ module space_invaders( input               CLOCK_50,
 	 
 	 player player_instance(.Clk,
 									.Reset(reset_h),
-									.frame_clk(VGA_HS),
+									.frame_clk(VGA_VS),
 									.keycode,
 									.DrawX,
 									.DrawY,
