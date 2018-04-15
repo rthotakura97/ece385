@@ -53,10 +53,10 @@ module player (input Clk,
 				default:player_X_Motion_in = 0;
 			endcase
 
-		/*if (player_X_Pos + player_Size >= player_X_Max) 
+		if (player_X_Pos + player_Size >= player_X_Max && player_X_Motion_in > 0) 
 			player_X_Motion_in = 0;
-		else if (player_X_Pos <= player_X_Min + player_Size)
-			player_X_Motion_in = 0;*/
+		else if (player_X_Pos <= player_X_Min + player_Size && player_X_Motion_in < 0)
+			player_X_Motion_in = 0;
 		
 		player_X_Pos_in = player_X_Pos + player_X_Motion;
 		end
