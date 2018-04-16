@@ -54,7 +54,11 @@ module player_projectile (input Clk,
 		projectile_x_pos_in = projectile_x_pos;
 		projectile_y_pos_in = projectile_y_pos;
 		projectile_y_motion_in = projectile_y_motion;
-		is_hit_in = is_hit;
+
+		if (is_hit)
+			is_hit_in = 1'b1;
+		else
+			is_hit_in = 1'b0;
 
 		if (frame_clk_rising_edge)
 		begin

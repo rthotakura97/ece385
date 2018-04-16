@@ -47,7 +47,10 @@ module alien (input Clk,
 			alien_x_motion <= alien_x_motion_in;
 			alien_y_motion <= alien_y_motion_in;
 			direction <= direction_in;
-			is_hit_curr <= is_hit;
+			if (is_hit || is_hit_curr)
+				is_hit_curr <= 1'b1;
+			else
+				is_hit_curr <= is_hit;
 		end
 	end
 
