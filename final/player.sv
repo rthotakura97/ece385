@@ -3,7 +3,7 @@ module player (input Clk,
 					 frame_clk, left, right,
 			   input [7:0] keycode,
 				input [9:0] DrawX, DrawY,
-			   output logic [9:0] player_X_Pos, player_Y_Pos,
+			   output logic [9:0] player_x_pos, player_y_pos,
 				output is_player
 		   );
 
@@ -16,7 +16,7 @@ module player (input Clk,
     parameter [9:0] player_X_Step = 10'd3;      // Step size on the X axis
     parameter [9:0] player_Size = 10'd4;        // player size
 
-	logic [9:0] player_X_Motion, player_X_Pos_in, player_X_Motion_in;
+	logic [9:0] player_X_Motion, player_x_pos_in, player_X_Motion_in;
 
 	logic frame_clk_delayed, frame_clk_rising_edge;
 	always_ff @ (posedge Clk) begin
@@ -28,35 +28,35 @@ module player (input Clk,
 	begin
 		if (Reset)
 		begin
-			player_X_Pos <= player_X_Center;
-			player_Y_Pos <= player_Y_Center;
+			player_x_pos <= player_X_Center;
+			player_y_pos <= player_Y_Center;
 			player_X_Motion <= 10'd0;
 		end
 		else
 		begin
-			player_X_Pos <= player_X_Pos_in;
-			player_Y_Pos <= player_Y_Center;
+			player_x_pos <= player_x_pos_in;
+			player_y_pos <= player_Y_Center;
 			player_X_Motion <= player_X_Motion_in;
 		end
 	end
 
 	always_comb
 	begin
-		player_X_Pos_in = player_X_Pos;
+		player_x_pos_in = player_x_pos;
 		player_X_Motion_in = player_X_Motion;
 
 		if (frame_clk_rising_edge)
 		begin
 		if (left == 1'b1)
 			begin 
-				if (player_X_Pos <= player_X_Min + player_Size)
+				if (player_x_pos <= player_X_Min + player_Size)
 					player_X_Motion_in = 0;
 				else 
 					player_X_Motion_in = (~(player_X_Step) + 1'b1);//left
 			end
 		else if (right == 1'b1)
 			begin
-				if (player_X_Pos + player_Size >= player_X_Max) 
+				if (player_x_pos + player_Size >= player_X_Max) 
 					player_X_Motion_in = 0;
 				else
 					player_X_Motion_in = player_X_Step;//right
@@ -66,13 +66,13 @@ module player (input Clk,
 			
 			/*case (keycode)
 				8'd80: begin 
-						 if (player_X_Pos <= player_X_Min + player_Size)
+						 if (player_x_pos <= player_X_Min + player_Size)
 							player_X_Motion_in = 0;
 						 else 
 							player_X_Motion_in = (~(player_X_Step) + 1'b1);//left
 						 end
 				8'd79: begin
-						 if (player_X_Pos + player_Size >= player_X_Max) 
+						 if (player_x_pos + player_Size >= player_X_Max) 
 							player_X_Motion_in = 0;
 						 else
 							player_X_Motion_in = player_X_Step;//right
@@ -80,13 +80,13 @@ module player (input Clk,
 				default:player_X_Motion_in = 0;
 			endcase*/
 		
-		player_X_Pos_in = player_X_Pos + player_X_Motion;
+		player_x_pos_in = player_x_pos + player_X_Motion;
 		end
 	end
 	
 	int DistX, DistY, Size;
-   assign DistX = DrawX - player_X_Pos;
-   assign DistY = DrawY - player_Y_Pos;
+   assign DistX = DrawX - player_x_pos;
+   assign DistY = DrawY - player_y_pos;
    assign Size = player_Size;
    always_comb begin
         if ( ( DistX*DistX + DistY*DistY) <= (Size*Size) ) 
