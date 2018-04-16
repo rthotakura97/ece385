@@ -1,24 +1,26 @@
 module player_projectile (input Clk,
 								Reset,
 								shoot,
-								frame_clk,
+								frame_clk, is_hit,
 								input [9:0] DrawX, DrawY,
 						  input [9:0] player_x_pos, player_y_pos,
 						  input [7:0] keycode,
 						  output is_missile, is_showing,
-						  output [9:0] projectile_y_pos
+						  output [9:0] projectile_y_pos, projectile_x_pos
 					  );
 
-	parameter [9:0] projectile_step = ~(10'd1) + 1'b1;
+	parameter [9:0] projectile_step = ~(10'd4) + 1'b1;
 	parameter [9:0] projectile_size = 10'd3;
 	parameter [9:0] projectile_y_min = 10'd0;
 
-	logic [9:0] projectile_y_motion, projectile_x_pos, projectile_x_pos_in, projectile_y_pos_in,
+	logic [9:0] projectile_y_motion, projectile_x_pos_in, projectile_y_pos_in,
 		projectile_y_motion_in;
 	//logic [9:0] projectile_y_pos;
+	//logic [9:0] projectile_x_pos;
 		
 	//logic is_showing;
 	logic is_showing_in;
+	logic is_hit_curr, is_hit_in;
 
 	logic frame_clk_delayed, frame_clk_rising_edge;
 	always_ff @ (posedge Clk) begin
@@ -34,6 +36,7 @@ module player_projectile (input Clk,
 			projectile_x_pos <= 10'b0;
 			projectile_y_pos <= 10'b0;
 			projectile_y_motion <= 10'b0;
+			is_hit_curr <= 10'b0;
 		end
 		else
 		begin
@@ -41,6 +44,7 @@ module player_projectile (input Clk,
 			projectile_x_pos <= projectile_x_pos_in;
 			projectile_y_pos <= projectile_y_pos_in;
 			projectile_y_motion <= projectile_y_motion_in;
+			is_hit_curr <= is_hit_in;
 		end
 	end
 
@@ -50,17 +54,19 @@ module player_projectile (input Clk,
 		projectile_x_pos_in = projectile_x_pos;
 		projectile_y_pos_in = projectile_y_pos;
 		projectile_y_motion_in = projectile_y_motion;
+		is_hit_in = is_hit;
 
 		if (frame_clk_rising_edge)
 		begin
 			if (is_showing == 1'b1) // Moving up
 			begin
-				if (projectile_y_pos <= projectile_y_min + projectile_size) // Missle stops
+				if (projectile_y_pos <= projectile_y_min + projectile_size || is_hit_curr) // Missle stops
 				begin
 					is_showing_in = 1'b0;
 					projectile_y_motion_in = 10'b0;
 					projectile_x_pos_in = 10'b0;
 					projectile_y_pos_in = 10'b0;
+					is_hit_in = 1'b0;
 				end
 				else
 				begin
@@ -69,7 +75,7 @@ module player_projectile (input Clk,
 				end
 
 			end
-			else if (keycode == 8'h2c) // Start moving
+			else if (shoot == 1'b1) //(keycode == 8'h2c) // Start moving
 			begin
 				is_showing_in = 1'b1;
 				projectile_x_pos_in = player_x_pos;

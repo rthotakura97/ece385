@@ -1,6 +1,6 @@
 module player (input Clk,
 					 Reset,
-					 frame_clk,
+					 frame_clk, left, right,
 			   input [7:0] keycode,
 				input [9:0] DrawX, DrawY,
 			   output logic [9:0] player_X_Pos, player_Y_Pos,
@@ -47,16 +47,38 @@ module player (input Clk,
 
 		if (frame_clk_rising_edge)
 		begin
-			case (keycode)
-				8'd80: player_X_Motion_in = (~(player_X_Step) + 1'b1);//left
-				8'd79: player_X_Motion_in = player_X_Step;//right
-				default:player_X_Motion_in = 0;
-			endcase
-
-		/*if (player_X_Pos + player_Size >= player_X_Max && player_X_Motion_in > 0) 
+		if (left == 1'b1)
+			begin 
+				if (player_X_Pos <= player_X_Min + player_Size)
+					player_X_Motion_in = 0;
+				else 
+					player_X_Motion_in = (~(player_X_Step) + 1'b1);//left
+			end
+		else if (right == 1'b1)
+			begin
+				if (player_X_Pos + player_Size >= player_X_Max) 
+					player_X_Motion_in = 0;
+				else
+					player_X_Motion_in = player_X_Step;//right
+			end
+		else
 			player_X_Motion_in = 0;
-		else if (player_X_Pos <= player_X_Min + player_Size && player_X_Motion_in < 0)
-			player_X_Motion_in = 0;*/
+			
+			/*case (keycode)
+				8'd80: begin 
+						 if (player_X_Pos <= player_X_Min + player_Size)
+							player_X_Motion_in = 0;
+						 else 
+							player_X_Motion_in = (~(player_X_Step) + 1'b1);//left
+						 end
+				8'd79: begin
+						 if (player_X_Pos + player_Size >= player_X_Max) 
+							player_X_Motion_in = 0;
+						 else
+							player_X_Motion_in = player_X_Step;//right
+						 end
+				default:player_X_Motion_in = 0;
+			endcase*/
 		
 		player_X_Pos_in = player_X_Pos + player_X_Motion;
 		end

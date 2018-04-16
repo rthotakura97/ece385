@@ -46,17 +46,19 @@ module space_invaders( input               CLOCK_50,
                                  DRAM_CLK      //SDRAM Clock
                     );
     
-    logic reset_h, Clk, shoot;
+    logic reset_h, Clk, shoot, left, right, is_hit;
     logic [7:0] keycode;
 	 logic [9:0] DrawX, DrawY;
 	 logic is_player, is_missile, is_showing, is_alien;
-    logic [9:0] player_X_Pos, player_Y_Pos;
-	 logic [9:0] projectile_y_pos;
+    logic [9:0] player_X_Pos, player_Y_Pos, alien_X_Pos, alien_Y_Pos;
+	 logic [9:0] projectile_y_pos, projectile_x_pos;
 	 
     assign Clk = CLOCK_50;
     always_ff @ (posedge Clk) begin
         reset_h <= ~(KEY[0]);        // The push buttons are active low
 		  shoot <= ~(KEY[3]);
+		  left <= ~(KEY[2]);
+		  right <= ~(KEY[1]);
     end
     
     logic [1:0] hpi_addr;
@@ -130,16 +132,23 @@ module space_invaders( input               CLOCK_50,
 									.keycode,
 									.DrawX,
 									.DrawY,
+									.left,
+									.right,
 									.player_X_Pos,
 									.player_Y_Pos,
 									.is_player);
 									
-	player_projectile missile(.Clk, .shoot, .Reset(reset_h), .frame_clk(VGA_VS), .DrawX, .DrawY,
-							 .player_x_pos(player_X_Pos), .player_y_pos(player_Y_Pos), .keycode, .is_missile, .is_showing, .projectile_y_pos);
+	player_projectile missile(.Clk, .shoot, .is_hit, .Reset(reset_h), .frame_clk(VGA_VS), .DrawX, .DrawY,
+							 .player_x_pos(player_X_Pos), .player_y_pos(player_Y_Pos), .keycode, .is_missile, .is_showing, .projectile_y_pos, .projectile_x_pos);
 
-	alien alien1(.Clk, .Reset(reset_h), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd20), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien);
+	alien alien1(.Clk, .Reset(reset_h), .is_hit, .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd20), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien, 
+						.alien_x_pos(alien_X_Pos), .alien_y_pos(alien_Y_Pos));
     
-    color_mapper color_instance( .is_player,            // Whether current pixel belongs to ball 
+    
+	 hitbox hitbox_detector(.target1_x_pos(projectile_x_pos), .target1_y_pos(projectile_y_pos), .target2_x_pos(alien_X_Pos)
+										, .target2_y_pos(alien_Y_Pos), .threshold(10'd20), .is_hit);
+	 
+	 color_mapper color_instance( .is_player,            // Whether current pixel belongs to ball 
 											.is_missile,
 											.is_alien,
                                  .DrawX, 
@@ -150,8 +159,8 @@ module space_invaders( input               CLOCK_50,
 	 );
     
     // Display keycode on hex display
-    HexDriver hex_inst_0 (projectile_y_pos[3:0], HEX0);
-    HexDriver hex_inst_1 (projectile_y_pos[7:4], HEX1);
+    HexDriver hex_inst_0 ({{3'b0}, {is_hit}}, HEX0);
+    HexDriver hex_inst_1 (4'b0, HEX1);
     
     /**************************************************************************************
         ATTENTION! Please answer the following quesiton in your lab report! Points will be allocated for the answers!
