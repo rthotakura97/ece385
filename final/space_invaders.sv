@@ -53,6 +53,33 @@ module space_invaders( input               CLOCK_50,
     logic [9:0] player_X_Pos, player_Y_Pos, alien_X_Pos, alien_Y_Pos;
 	 logic [9:0] projectile_y_pos, projectile_x_pos;
 	 
+	 logic [9:0] alien_X_Pos_2, alien_Y_Pos_2;
+	 logic is_hit_2, is_alien_2;
+	 
+	 logic [9:0] alien_X_Pos_3, alien_Y_Pos_3;
+	 logic is_hit_3, is_alien_3;
+	 
+	 logic [9:0] alien_X_Pos_4, alien_Y_Pos_4;
+	 logic is_hit_4, is_alien_4;
+	 
+	 logic [9:0] alien_X_Pos_5, alien_Y_Pos_5;
+	 logic is_hit_5, is_alien_5;
+	 
+	 logic [9:0] alien_X_Pos_6, alien_Y_Pos_6;
+	 logic is_hit_6, is_alien_6;
+	 
+	 logic [9:0] alien_X_Pos_7, alien_Y_Pos_7;
+	 logic is_hit_7, is_alien_7;
+	 
+	 logic [9:0] alien_X_Pos_8, alien_Y_Pos_8;
+	 logic is_hit_8, is_alien_8;
+	 
+	 logic [9:0] alien_X_Pos_9, alien_Y_Pos_9;
+	 logic is_hit_9, is_alien_9;
+	 
+	 logic [9:0] alien_X_Pos_10, alien_Y_Pos_10;
+	 logic is_hit_10, is_alien_10;
+	 
     assign Clk = CLOCK_50;
     always_ff @ (posedge Clk) begin
         reset_h <= ~(KEY[0]);        // The push buttons are active low
@@ -138,19 +165,75 @@ module space_invaders( input               CLOCK_50,
 									.player_Y_Pos,
 									.is_player);
 									
-	player_projectile missile(.Clk, .shoot, .is_hit, .Reset(reset_h), .frame_clk(VGA_VS), .DrawX, .DrawY,
+	player_projectile missile(.Clk, .shoot, .is_hit(is_hit || is_hit_2 || is_hit_3 || is_hit_4 || is_hit_5 || is_hit_6 || is_hit_7 || is_hit_8 || is_hit_9 || is_hit_10), .Reset(reset_h), .frame_clk(VGA_VS), .DrawX, .DrawY,
 							 .player_x_pos(player_X_Pos), .player_y_pos(player_Y_Pos), .keycode, .is_missile, .is_showing, .projectile_y_pos, .projectile_x_pos);
 
 	alien alien1(.Clk, .Reset(reset_h), .is_hit, .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd20), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien, 
 						.alien_x_pos(alien_X_Pos), .alien_y_pos(alien_Y_Pos));
     
+	 alien alien2(.Clk, .Reset(reset_h), .is_hit(is_hit_2), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd40), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien_2), 
+						.alien_x_pos(alien_X_Pos_2), .alien_y_pos(alien_Y_Pos_2));
+						
+	alien alien3(.Clk, .Reset(reset_h), .is_hit(is_hit_3), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd60), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien_3), 
+						.alien_x_pos(alien_X_Pos_3), .alien_y_pos(alien_Y_Pos_3));
+						
+	alien alien4(.Clk, .Reset(reset_h), .is_hit(is_hit_4), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd80), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien_4), 
+						.alien_x_pos(alien_X_Pos_4), .alien_y_pos(alien_Y_Pos_4));					
     
+	 alien alien5(.Clk, .Reset(reset_h), .is_hit(is_hit_5), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd100), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien_5), 
+						.alien_x_pos(alien_X_Pos_5), .alien_y_pos(alien_Y_Pos_5));
+						
+	alien alien6(.Clk, .Reset(reset_h), .is_hit(is_hit_6), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd120), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien_6), 
+						.alien_x_pos(alien_X_Pos_6), .alien_y_pos(alien_Y_Pos_6));
+						
+	alien alien7(.Clk, .Reset(reset_h), .is_hit(is_hit_7), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd140), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien_7), 
+						.alien_x_pos(alien_X_Pos_7), .alien_y_pos(alien_Y_Pos_7));
+						
+	alien alien8(.Clk, .Reset(reset_h), .is_hit(is_hit_8), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd160), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien_8), 
+						.alien_x_pos(alien_X_Pos_8), .alien_y_pos(alien_Y_Pos_8));
+						
+	alien alien9(.Clk, .Reset(reset_h), .is_hit(is_hit_9), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd180), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien_9), 
+						.alien_x_pos(alien_X_Pos_9), .alien_y_pos(alien_Y_Pos_9));
+						
+						
+	alien alien10(.Clk, .Reset(reset_h), .is_hit(is_hit_10), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd200), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien_10), 
+						.alien_x_pos(alien_X_Pos_10), .alien_y_pos(alien_Y_Pos_10));
+	 
 	 hitbox hitbox_detector(.target1_x_pos(projectile_x_pos), .target1_y_pos(projectile_y_pos), .target2_x_pos(alien_X_Pos)
 										, .target2_y_pos(alien_Y_Pos), .threshold(10'd20), .is_hit);
+										
+	hitbox hitbox_detector_2(.target1_x_pos(projectile_x_pos), .target1_y_pos(projectile_y_pos), .target2_x_pos(alien_X_Pos_2)
+										, .target2_y_pos(alien_Y_Pos_2), .threshold(10'd20), .is_hit(is_hit_2));
+										
+	hitbox hitbox_detector_3(.target1_x_pos(projectile_x_pos), .target1_y_pos(projectile_y_pos), .target2_x_pos(alien_X_Pos_3)
+										, .target2_y_pos(alien_Y_Pos_3), .threshold(10'd20), .is_hit(is_hit_3));
+										
+	hitbox hitbox_detector_4(.target1_x_pos(projectile_x_pos), .target1_y_pos(projectile_y_pos), .target2_x_pos(alien_X_Pos_4)
+										, .target2_y_pos(alien_Y_Pos_4), .threshold(10'd20), .is_hit(is_hit_4));
+										
+										
+	hitbox hitbox_detector_5(.target1_x_pos(projectile_x_pos), .target1_y_pos(projectile_y_pos), .target2_x_pos(alien_X_Pos_5)
+										, .target2_y_pos(alien_Y_Pos_5), .threshold(10'd20), .is_hit(is_hit_5));
+										
+	hitbox hitbox_detector_6(.target1_x_pos(projectile_x_pos), .target1_y_pos(projectile_y_pos), .target2_x_pos(alien_X_Pos_6)
+										, .target2_y_pos(alien_Y_Pos_6), .threshold(10'd20), .is_hit(is_hit_6));
+										
+										
+	hitbox hitbox_detector_7(.target1_x_pos(projectile_x_pos), .target1_y_pos(projectile_y_pos), .target2_x_pos(alien_X_Pos_7)
+										, .target2_y_pos(alien_Y_Pos_7), .threshold(10'd20), .is_hit(is_hit_7));
+										
+	hitbox hitbox_detector_8(.target1_x_pos(projectile_x_pos), .target1_y_pos(projectile_y_pos), .target2_x_pos(alien_X_Pos_8)
+										, .target2_y_pos(alien_Y_Pos_8), .threshold(10'd20), .is_hit(is_hit_8));
+										
+	hitbox hitbox_detector_9(.target1_x_pos(projectile_x_pos), .target1_y_pos(projectile_y_pos), .target2_x_pos(alien_X_Pos_9)
+										, .target2_y_pos(alien_Y_Pos_9), .threshold(10'd20), .is_hit(is_hit_9));
+									
+	hitbox hitbox_detector_10(.target1_x_pos(projectile_x_pos), .target1_y_pos(projectile_y_pos), .target2_x_pos(alien_X_Pos_10)
+										, .target2_y_pos(alien_Y_Pos_10), .threshold(10'd20), .is_hit(is_hit_10));
 	 
 	 color_mapper color_instance( .is_player,            // Whether current pixel belongs to ball 
 											.is_missile,
-											.is_alien,
+											.is_alien(is_alien || is_alien_2 || is_alien_3 || is_alien_4 || is_alien_5 || is_alien_6 || is_alien_7 || is_alien_8 || is_alien_9 || is_alien_10),
                                  .DrawX, 
 										   .DrawY,       // Current pixel coordinates
 											.VGA_R, 
@@ -159,7 +242,7 @@ module space_invaders( input               CLOCK_50,
 	 );
     
     // Display keycode on hex display
-    HexDriver hex_inst_0 ({{3'b0}, {is_hit}}, HEX0);
+    HexDriver hex_inst_0 (4'b0, HEX0);
     HexDriver hex_inst_1 (4'b0, HEX1);
     
     /**************************************************************************************
