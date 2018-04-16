@@ -60,11 +60,21 @@ module player_projectile (input Clk,
 		else
 			is_hit_in = 1'b0;
 
+		if (is_hit_curr)
+			begin
+				is_showing_in = 1'b0;
+				projectile_y_motion_in = 10'b0;
+				projectile_x_pos_in = 10'b0;
+				projectile_y_pos_in = 10'b0;
+				is_hit_in = 1'b0;
+			end
+
+
 		if (frame_clk_rising_edge)
 		begin
 			if (is_showing == 1'b1) // Moving up
 			begin
-				if (projectile_y_pos <= projectile_y_min + projectile_size || is_hit_curr) // Missle stops
+				if (projectile_y_pos <= projectile_y_min + projectile_size) // Missle stops
 				begin
 					is_showing_in = 1'b0;
 					projectile_y_motion_in = 10'b0;
