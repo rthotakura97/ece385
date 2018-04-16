@@ -57,9 +57,15 @@ module space_invaders( input               CLOCK_50,
 	logic [9:0] alien_x_pos[10], alien_y_pos[10];
 
 	logic is_hit_total, is_alien_total;
+	logic end_game_hits, end_game_boundary;
+	
+	int score;
+	
 	always_comb begin
 		is_hit_total = is_hit[0] || is_hit[1] || is_hit[2] || is_hit[3] || is_hit[4] || is_hit[5] || is_hit[6] || is_hit[7] || is_hit[8] || is_hit[9];
 		is_alien_total = is_alien[0] || is_alien[1] || is_alien[2] || is_alien[3] || is_alien[4] || is_alien[5] || is_alien[6] || is_alien[7] || is_alien[8] || is_alien[9];
+		end_game_hits = is_hit[0] && is_hit[1] && is_hit[2] && is_hit[3] && is_hit[4] && is_hit[5] && is_hit[6] && is_hit[7] && is_hit[8] && is_hit[9];
+		score = is_hit[0] + is_hit[1] + is_hit[2] + is_hit[3] + is_hit[4] + is_hit[5] + is_hit[6] + is_hit[7] + is_hit[8] + is_hit[9];	
 	end
 	 
     assign Clk = CLOCK_50;
@@ -171,7 +177,7 @@ module space_invaders( input               CLOCK_50,
 						
 	alien alien7(.Clk, .Reset(reset_h), .is_hit(is_hit[7]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd160), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[7]), .alien_x_pos(alien_x_pos[7]), .alien_y_pos(alien_y_pos[7]));
 						
-	alien alien8(.Clk, .Reset(reset_h), .is_hit(is_hit[8]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd180), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[8]), .alien_x_pos(alien_x_pos[8]), .alien_y_pos(alien_Y_Pos[8]));
+	alien alien8(.Clk, .Reset(reset_h), .is_hit(is_hit[8]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd180), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[8]), .alien_x_pos(alien_x_pos[8]), .alien_y_pos(alien_y_pos[8]));
 						
 	alien alien9(.Clk, .Reset(reset_h), .is_hit(is_hit[9]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd200), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[9]), .alien_x_pos(alien_x_pos[9]), .alien_y_pos(alien_y_pos[9]));
 
@@ -202,14 +208,19 @@ module space_invaders( input               CLOCK_50,
 	color_mapper color_instance( .is_player,
 								 .is_missile,
 								 .is_alien(is_alien_total),
-                                 .DrawX, 
-							   	 .DrawY,
+								 .end_game(end_game_hits),
+                         .DrawX, 
+								 .DrawY,
 								 .VGA_R, 
 								 .VGA_G, 
 								 .VGA_B
 	 );
     
     // Display keycode on hex display
+	 /*
     HexDriver hex_inst_0 (4'b0, HEX0);
     HexDriver hex_inst_1 (4'b0, HEX1);
+	 */
+	 int_driver int_driver_0 (score % 10, HEX0);
+	 int_driver int_driver_1 (score / 10, HEX1);
 endmodule

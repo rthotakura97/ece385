@@ -34,11 +34,9 @@ module alien (input Clk,
 			is_hit_curr <= 1'b0;
 			alien_x_pos <= alien_x_start;	
 			alien_y_pos <= alien_y_start;	
-			if (direction == 1'b0)
-				alien_x_motion <= alien_x_step;
-			else
-				alien_x_motion <= ~(alien_x_step) + 1'b1;
+			direction <= init_direction;
 			alien_y_motion <= 10'd0;
+			alien_x_motion <= 10'd0;
 		end
 		else
 		begin
