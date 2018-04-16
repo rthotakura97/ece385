@@ -2,10 +2,9 @@ module player_projectile (input Clk,
 								Reset,
 								shoot,
 								frame_clk, is_hit,
-								input [9:0] DrawX, DrawY,
+						  input [9:0] DrawX, DrawY,
 						  input [9:0] player_x_pos, player_y_pos,
-						  input [7:0] keycode,
-						  output is_missile, is_showing,
+						  output is_missile,
 						  output [9:0] projectile_y_pos, projectile_x_pos
 					  );
 
@@ -15,10 +14,8 @@ module player_projectile (input Clk,
 
 	logic [9:0] projectile_y_motion, projectile_x_pos_in, projectile_y_pos_in,
 		projectile_y_motion_in;
-	//logic [9:0] projectile_y_pos;
-	//logic [9:0] projectile_x_pos;
 		
-	//logic is_showing;
+	logic is_showing;
 	logic is_showing_in;
 	logic is_hit_curr, is_hit_in;
 
@@ -89,7 +86,7 @@ module player_projectile (input Clk,
 				end
 
 			end
-			else if (shoot == 1'b1) //(keycode == 8'h2c) // Start moving
+			else if (shoot == 1'b1) // Start moving
 			begin
 				is_showing_in = 1'b1;
 				projectile_x_pos_in = player_x_pos;
@@ -115,5 +112,56 @@ module player_projectile (input Clk,
 		else begin
 			is_missile = 1'b0;
 		end
+	end
+endmodule
+
+module missile_control(input Clk, Reset, shoot,
+					   output [1:0] missile_select);
+
+	enum logic[2:0] {Select0_0, Select0_1, Select1_0, Select1_1, Select2_0, Select2_1} curr_state, next_state;
+
+	always_ff @ (posedge Clk)
+	begin
+		if (Reset)
+			curr_state <= Select0;
+		else
+			curr_state <= next_state;
+	end
+
+	always_comb
+	begin
+		next_state = curr_state
+		missile_select = 0;
+
+		case (curr_state)
+			Select0_0: begin
+				missile_select = 2'd0;
+				if (shoot == 1) next_state = Select0_1;
+			end
+			Select0_0: begin
+				missile_select = 2'd0;
+				if (shoot == 0) next_state = Select1_0;
+			end
+			Select1_0: begin
+				missile_select = 2'd1;
+				if (shoot == 1) next_state = Select1_1;
+			end
+			Select1_1: begin
+				missile_select = 2'd1;
+				if (shoot == 0) next_state = Select2_0;
+			end
+			Select2_0: begin
+				missile_select = 2'd2;
+				if (shoot == 1) next_state = Select2_1;
+			end
+			Select2_1: begin
+				missile_select = 2'd2;
+				if (shoot == 0) next_state = Select0_0;
+			end
+			default: begin 
+				missile_select = 2'd0;
+				next_state = Select0;
+			end
+		endcase
 	end
 endmodule
