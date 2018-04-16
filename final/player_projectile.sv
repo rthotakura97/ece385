@@ -123,14 +123,14 @@ module missile_control(input Clk, Reset, shoot,
 	always_ff @ (posedge Clk)
 	begin
 		if (Reset)
-			curr_state <= Select0;
+			curr_state <= Select0_0;
 		else
 			curr_state <= next_state;
 	end
 
 	always_comb
 	begin
-		next_state = curr_state
+		next_state = curr_state;
 		missile_select = 0;
 
 		case (curr_state)
@@ -138,7 +138,7 @@ module missile_control(input Clk, Reset, shoot,
 				missile_select = 2'd0;
 				if (shoot == 1) next_state = Select0_1;
 			end
-			Select0_0: begin
+			Select0_1: begin
 				missile_select = 2'd0;
 				if (shoot == 0) next_state = Select1_0;
 			end
@@ -160,7 +160,7 @@ module missile_control(input Clk, Reset, shoot,
 			end
 			default: begin 
 				missile_select = 2'd0;
-				next_state = Select0;
+				next_state = Select0_0;
 			end
 		endcase
 	end

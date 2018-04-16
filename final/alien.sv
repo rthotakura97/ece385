@@ -4,15 +4,15 @@ module alien (input Clk,
 					init_direction, // 0 for left, 1 for right
 			  input [9:0] alien_x_start, alien_y_start,
 			  input [9:0] DrawX, DrawY,
-			  output is_alien,
+			  output is_alien, is_alien_hit, is_alien_oob,
 			  output [9:0] alien_x_pos, alien_y_pos
 			 );
 	
 	parameter [9:0] alien_x_min = 10'd10;
 	parameter [9:0] alien_x_max = 10'd629;
-	parameter [9:0] alien_y_max = 10'd349;
+	parameter [9:0] alien_y_max = 10'd450;
 	parameter [9:0] alien_x_step = 10'd1;
-	parameter [9:0] alien_y_step = 10'd30;
+	parameter [9:0] alien_y_step = 10'd80;
 	parameter [9:0] alien_size = 10'd4;
 
 	//logic [9:0] alien_x_pos, alien_y_pos;
@@ -20,7 +20,9 @@ module alien (input Clk,
 	logic [9:0] alien_x_motion, alien_x_motion_in, alien_y_motion, alien_y_motion_in;
 	logic [1:0] direction, direction_in; //0 for left, 1 for right, 2 for down
 	logic is_hit_curr;
-
+	
+	assign is_alien_hit = is_hit_curr;
+	
 	logic frame_clk_delayed, frame_clk_rising_edge;
 	always_ff @ (posedge Clk) begin
 		frame_clk_delayed <= frame_clk;
@@ -60,6 +62,11 @@ module alien (input Clk,
 		alien_x_motion_in = alien_x_motion;
 		alien_y_motion_in = alien_y_motion;
 		
+		if (alien_y_pos + alien_size >= alien_y_max)
+				is_alien_oob = 1'b1;
+		else
+				is_alien_oob = 1'b0;
+				
 		direction_in = direction;
 
 		if (frame_clk_rising_edge && !is_hit_curr)
@@ -89,8 +96,8 @@ module alien (input Clk,
 						alien_y_motion_in = 0;
 						alien_x_motion_in = alien_x_step;
 					end
-				end
-				2'd2: begin // Down
+				end //down
+				2'd2: begin
 					alien_y_motion_in = alien_y_step;
 					alien_x_motion_in = 0;
 					if (alien_x_pos > 320) // go left 
