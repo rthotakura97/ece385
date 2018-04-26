@@ -49,6 +49,9 @@ module space_invaders( input               CLOCK_50,
    logic reset_h, Clk, shoot, shoot_in, left, right;
    logic [7:0] keycode;
 	logic [9:0] DrawX, DrawY;
+	
+	logic is_lost, is_won; 
+	int score;
 	 
     assign Clk = CLOCK_50;
     always_ff @ (posedge Clk) begin
@@ -134,4 +137,20 @@ module space_invaders( input               CLOCK_50,
 	 */
 	 int_driver int_driver_0 (score % 10, HEX0);
 	 int_driver int_driver_1 (score / 10, HEX1);
+	 
+	 level_1 level_1_instance(.Clk, 
+									  .reset_h,
+									  .shoot,
+									  .left,
+									  .right,
+									  .VGA_VS,
+									  .DrawX,
+									  .DrawY,
+									  .VGA_R,
+									  .VGA_G,
+									  .VGA_B,
+									  .is_lost,
+									  .is_won,
+									  .score);
+	 
 endmodule

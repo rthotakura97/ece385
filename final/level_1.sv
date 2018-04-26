@@ -1,7 +1,8 @@
 module level_1(input reset_h, Clk, shoot, left, right, VGA_VS,
 					input [9:0] DrawX, DrawY,
 					output [7:0] VGA_R, VGA_G, VGA_B,
-					output is_lost, is_won);
+					output is_lost, is_won,
+					output int score);
 	
 	parameter hitbox_threshold = 10'd20;
 	
@@ -16,8 +17,6 @@ module level_1(input reset_h, Clk, shoot, left, right, VGA_VS,
 	logic is_hit_missile[3];
 
 	logic [1:0] missile_select;
-	
-	int score;
 	
 	always_comb begin
 		is_hit_missile[0] = is_hit[0][0] || is_hit[1][0] || is_hit[2][0] || is_hit[3][0] || is_hit[4][0] || is_hit[5][0] || is_hit[6][0] || is_hit[7][0] || is_hit[8][0] || is_hit[9][0];
@@ -153,7 +152,7 @@ module level_1(input reset_h, Clk, shoot, left, right, VGA_VS,
 	color_mapper color_instance( .is_player,
 								 .is_missile(is_missile_total),
 								 .is_alien(is_alien_total),
-								 .end_game(end_game_hits),
+								 .end_game(is_won || is_lost),
                          .DrawX, 
 								 .DrawY,
 								 .VGA_R, 
