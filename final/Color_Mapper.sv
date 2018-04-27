@@ -14,7 +14,7 @@
 //-------------------------------------------------------------------------
 
 // color_mapper: Decide which color to be output to VGA for each pixel.
-module  color_mapper ( input    is_player,            // Whether current pixel belongs to ball 
+module  color_mapper ( input              is_player,            // Whether current pixel belongs to ball 
 										  is_missile,
 										  is_alien,
 										  end_game_won, 
@@ -79,3 +79,4 @@ module  color_mapper ( input    is_player,            // Whether current pixel b
     end 
     
 endmodule
+
