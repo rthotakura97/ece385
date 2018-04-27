@@ -49,9 +49,6 @@ module space_invaders( input               CLOCK_50,
    logic reset_h, Clk, shoot, shoot_in, left, right;
    logic [7:0] keycode;
 	logic [9:0] DrawX, DrawY;
-	
-	logic is_lost, is_won; 
-	int score;
 	 
     assign Clk = CLOCK_50;
     always_ff @ (posedge Clk) begin
@@ -129,28 +126,32 @@ module space_invaders( input               CLOCK_50,
 										   .DrawX,       // horizontal coordinate
                                            .DrawY);
 
-    
-    // Display keycode on hex display
-	 /*
-    HexDriver hex_inst_0 (4'b0, HEX0);
-    HexDriver hex_inst_1 (4'b0, HEX1);
-	 */
-	 int_driver int_driver_0 (score % 10, HEX0);
-	 int_driver int_driver_1 (score / 10, HEX1);
+	
+	logic is_lost, is_won, is_lost_lev[3], is_won_lev[3]; 
+	int score, score_lev[3];
+	logic [1:0] level, color_mapper_select;
+
+	logic [7:0] VGA_R_LEV[4], VGA_G_LEV[4], VGA_B_LEV[4];
+
+	int_driver int_driver_0 (score % 10, HEX0);
+	int_driver int_driver_1 (score / 10, HEX1);
+
+	state_machine states(.*, .Reset(reset_h));
+
+	always_comb begin
+		VGA_R = VGA_R_LEV[color_mapper_select];
+		VGA_G = VGA_G_LEV[color_mapper_select];
+		VGA_B = VGA_B_LEV[color_mapper_select];
+		score = score_lev[level];
+		is_won = is_won_lev[level];
+		is_lost = is_lost_lev[level];
+	end
 	 
-	 level_1 level_1_instance(.Clk, 
-									  .reset_h,
-									  .shoot,
-									  .left,
-									  .right,
-									  .VGA_VS,
-									  .DrawX,
-									  .DrawY,
-									  .VGA_R,
-									  .VGA_G,
-									  .VGA_B,
-									  .is_lost,
-									  .is_won,
-									  .score);
+	level_1 level_1_instance(.*, .VGA_R(VGA_R_LEV[0]), .VGA_G(VGA_G_LEV[0]), .VGA_B(VGA_B_LEV[0]), .is_lost(is_lost_lev[0]), .is_won(is_won_lev[0]), .score(score_lev[0]));
+
+	level_2 level_2_instance(.*, .Reset(reset_h), .frame_clk(VGA_VS), .VGA_R(VGA_R_LEV[1]), .VGA_G(VGA_G_LEV[1]), .VGA_B(VGA_B_LEV[1]), .is_lost(is_lost_lev[1]), .is_won(is_won_lev[1]), .score(score_lev[1]));
+
+	// TODO: Level 3
 	 
+	// TODO: End of game color mapper
 endmodule
