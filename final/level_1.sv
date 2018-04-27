@@ -10,7 +10,7 @@ module level_1(input reset_h, Clk, shoot, left, right, VGA_VS,
    logic [9:0] player_x_pos, player_y_pos;
 	logic [9:0] projectile_y_pos[3], projectile_x_pos[3];
 
-	logic is_hit[10][3], is_alien[10], is_missile[3], is_alien_hit[10];
+	logic is_hit[10][3], is_alien[10], is_missile[3], is_alien_hit[10], is_alien_oob[10];
 	logic [9:0] alien_x_pos[10], alien_y_pos[10];
 
 	logic is_hit_total, is_alien_total, is_missile_total;
@@ -29,6 +29,8 @@ module level_1(input reset_h, Clk, shoot, left, right, VGA_VS,
 
 		score = is_alien_hit[0] + is_alien_hit[1] + is_alien_hit[2] + is_alien_hit[3] + is_alien_hit[4] + is_alien_hit[5] + is_alien_hit[6] + is_alien_hit[7] + is_alien_hit[8] + is_alien_hit[9];
 		is_won = (score == 'd10);
+		is_lost = is_alien_oob[0] || is_alien_oob[1] || is_alien_oob[2] || is_alien_oob[3] || is_alien_oob[4] || is_alien_oob[5] || is_alien_oob[6] || is_alien_oob[7] || is_alien_oob[8] || is_alien_oob[9]; 
+		
 		is_missile_total = is_missile[0] || is_missile[1] || is_missile[2];
 	end
  
@@ -55,25 +57,25 @@ module level_1(input reset_h, Clk, shoot, left, right, VGA_VS,
 
 	// Aliens
 
-	alien alien0(.Clk, .Reset(reset_h), .is_hit(is_hit[0][0] || is_hit[0][1] || is_hit[0][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd20), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[0]), .alien_x_pos(alien_x_pos[0]), .alien_y_pos(alien_y_pos[0]), .is_alien_hit(is_alien_hit[0]));
+	alien alien0(.Clk, .Reset(reset_h), .is_hit(is_hit[0][0] || is_hit[0][1] || is_hit[0][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd20), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[0]), .alien_x_pos(alien_x_pos[0]), .alien_y_pos(alien_y_pos[0]), .is_alien_hit(is_alien_hit[0]), .is_alien_oob(is_alien_oob[0]));
     
-	alien alien1(.Clk, .Reset(reset_h), .is_hit(is_hit[1][0] || is_hit[1][1] || is_hit[1][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd40), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[1]), .alien_x_pos(alien_x_pos[1]), .alien_y_pos(alien_y_pos[1]), .is_alien_hit(is_alien_hit[1]));
+	alien alien1(.Clk, .Reset(reset_h), .is_hit(is_hit[1][0] || is_hit[1][1] || is_hit[1][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd80), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[1]), .alien_x_pos(alien_x_pos[1]), .alien_y_pos(alien_y_pos[1]), .is_alien_hit(is_alien_hit[1]), .is_alien_oob(is_alien_oob[1]));
 						
-	alien alien2(.Clk, .Reset(reset_h), .is_hit(is_hit[2][0] || is_hit[2][1] || is_hit[2][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd60), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[2]), .alien_x_pos(alien_x_pos[2]), .alien_y_pos(alien_y_pos[2]), .is_alien_hit(is_alien_hit[2]));
+	alien alien2(.Clk, .Reset(reset_h), .is_hit(is_hit[2][0] || is_hit[2][1] || is_hit[2][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd140), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[2]), .alien_x_pos(alien_x_pos[2]), .alien_y_pos(alien_y_pos[2]), .is_alien_hit(is_alien_hit[2]), .is_alien_oob(is_alien_oob[2]));
 						
-	alien alien3(.Clk, .Reset(reset_h), .is_hit(is_hit[3][0] || is_hit[3][0] || is_hit[3][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd80), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[3]), .alien_x_pos(alien_x_pos[3]), .alien_y_pos(alien_y_pos[3]), .is_alien_hit(is_alien_hit[3]));					
+	alien alien3(.Clk, .Reset(reset_h), .is_hit(is_hit[3][0] || is_hit[3][0] || is_hit[3][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd200), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[3]), .alien_x_pos(alien_x_pos[3]), .alien_y_pos(alien_y_pos[3]), .is_alien_hit(is_alien_hit[3]), .is_alien_oob(is_alien_oob[3]));					
     
-	alien alien4(.Clk, .Reset(reset_h), .is_hit(is_hit[4][0] || is_hit[4][1] || is_hit[4][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd100), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[4]), .alien_x_pos(alien_x_pos[4]), .alien_y_pos(alien_y_pos[4]), .is_alien_hit(is_alien_hit[4]));
+	alien alien4(.Clk, .Reset(reset_h), .is_hit(is_hit[4][0] || is_hit[4][1] || is_hit[4][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd260), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[4]), .alien_x_pos(alien_x_pos[4]), .alien_y_pos(alien_y_pos[4]), .is_alien_hit(is_alien_hit[4]), .is_alien_oob(is_alien_oob[4]));
 						
-	alien alien5(.Clk, .Reset(reset_h), .is_hit(is_hit[5][0] || is_hit[5][1] || is_hit[5][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd120), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[5]), .alien_x_pos(alien_x_pos[5]), .alien_y_pos(alien_y_pos[5]), .is_alien_hit(is_alien_hit[5]));
+	alien alien5(.Clk, .Reset(reset_h), .is_hit(is_hit[5][0] || is_hit[5][1] || is_hit[5][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd320), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[5]), .alien_x_pos(alien_x_pos[5]), .alien_y_pos(alien_y_pos[5]), .is_alien_hit(is_alien_hit[5]), .is_alien_oob(is_alien_oob[5]));
 						
-	alien alien6(.Clk, .Reset(reset_h), .is_hit(is_hit[6][0] || is_hit[6][1] || is_hit[6][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd140), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[6]), .alien_x_pos(alien_x_pos[6]), .alien_y_pos(alien_y_pos[6]), .is_alien_hit(is_alien_hit[6]));
+	alien alien6(.Clk, .Reset(reset_h), .is_hit(is_hit[6][0] || is_hit[6][1] || is_hit[6][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd380), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[6]), .alien_x_pos(alien_x_pos[6]), .alien_y_pos(alien_y_pos[6]), .is_alien_hit(is_alien_hit[6]), .is_alien_oob(is_alien_oob[6]));
 						
-	alien alien7(.Clk, .Reset(reset_h), .is_hit(is_hit[7][0] || is_hit[7][1] || is_hit[7][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd160), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[7]), .alien_x_pos(alien_x_pos[7]), .alien_y_pos(alien_y_pos[7]), .is_alien_hit(is_alien_hit[7]));
+	alien alien7(.Clk, .Reset(reset_h), .is_hit(is_hit[7][0] || is_hit[7][1] || is_hit[7][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd440), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[7]), .alien_x_pos(alien_x_pos[7]), .alien_y_pos(alien_y_pos[7]), .is_alien_hit(is_alien_hit[7]), .is_alien_oob(is_alien_oob[7]));
 						
-	alien alien8(.Clk, .Reset(reset_h), .is_hit(is_hit[8][0] || is_hit[8][1] || is_hit[8][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd180), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[8]), .alien_x_pos(alien_x_pos[8]), .alien_y_pos(alien_y_pos[8]), .is_alien_hit(is_alien_hit[8]));
+	alien alien8(.Clk, .Reset(reset_h), .is_hit(is_hit[8][0] || is_hit[8][1] || is_hit[8][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd500), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[8]), .alien_x_pos(alien_x_pos[8]), .alien_y_pos(alien_y_pos[8]), .is_alien_hit(is_alien_hit[8]), .is_alien_oob(is_alien_oob[8]));
 						
-	alien alien9(.Clk, .Reset(reset_h), .is_hit(is_hit[9][0] || is_hit[9][1] || is_hit[9][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd200), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[9]), .alien_x_pos(alien_x_pos[9]), .alien_y_pos(alien_y_pos[9]), .is_alien_hit(is_alien_hit[9]));
+	alien alien9(.Clk, .Reset(reset_h), .is_hit(is_hit[9][0] || is_hit[9][1] || is_hit[9][2]), .frame_clk(VGA_VS), .init_direction(1'b1), .alien_x_start(10'd560), .alien_y_start(10'd20), .DrawX, .DrawY, .is_alien(is_alien[9]), .alien_x_pos(alien_x_pos[9]), .alien_y_pos(alien_y_pos[9]), .is_alien_hit(is_alien_hit[9]), .is_alien_oob(is_alien_oob[9]));
 
 	// Hitboxes
 	 
@@ -152,7 +154,8 @@ module level_1(input reset_h, Clk, shoot, left, right, VGA_VS,
 	color_mapper color_instance( .is_player,
 								 .is_missile(is_missile_total),
 								 .is_alien(is_alien_total),
-								 .end_game(is_won || is_lost),
+								 .end_game_won(is_won),
+								 .end_game_lost(is_lost),
                          .DrawX, 
 								 .DrawY,
 								 .VGA_R, 
