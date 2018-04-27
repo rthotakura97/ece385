@@ -23,8 +23,6 @@ module level_1(input reset_h, Clk, shoot, left, right, VGA_VS,
 		is_hit_missile[1] = is_hit[0][1] || is_hit[1][1] || is_hit[2][1] || is_hit[3][1] || is_hit[4][1] || is_hit[5][1] || is_hit[6][1] || is_hit[7][1] || is_hit[8][1] || is_hit[9][1];
 		is_hit_missile[2] = is_hit[0][2] || is_hit[1][2] || is_hit[2][2] || is_hit[3][2] || is_hit[4][2] || is_hit[5][2] || is_hit[6][2] || is_hit[7][2] || is_hit[8][2] || is_hit[9][2];
 
-		is_hit_total = is_hit_missile[0] || is_hit_missile[1] || is_hit_missile[2];
-
 		is_alien_total = is_alien[0] || is_alien[1] || is_alien[2] || is_alien[3] || is_alien[4] || is_alien[5] || is_alien[6] || is_alien[7] || is_alien[8] || is_alien[9];
 
 		score = is_alien_hit[0] + is_alien_hit[1] + is_alien_hit[2] + is_alien_hit[3] + is_alien_hit[4] + is_alien_hit[5] + is_alien_hit[6] + is_alien_hit[7] + is_alien_hit[8] + is_alien_hit[9];
