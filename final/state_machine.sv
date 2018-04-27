@@ -1,5 +1,7 @@
 module state_machine (input Clk, Reset, Run, is_lost, is_won,
-							 output [1:0] level, color_mapper_select);
+					  output level_reset,
+					  output [1:0] level, color_mapper_select
+					);
 							 
 enum logic [3:0] {Start, Level_1_Setup, Level_1_Wait, Level_2_Setup, Level_2_Wait, Level_3_Setup, Level_3_Wait, Won, Lost} curr_state, next_state;
 
@@ -38,51 +40,61 @@ begin
 		Start: 
 		begin
 			level = 2'b00;
+			level_reset = 0;
 			color_mapper_select = 2'b00;
 		end
 		Level_1_Setup:
 		begin
 			level = 2'b00;
+			level_reset = 1;
 			color_mapper_select =2'b00;
 		end
 		Level_1_Wait:
 		begin
 			level = 2'b00;
+			level_reset = 0;
 			color_mapper_select = 2'b00;
 		end
 		Level_2_Setup:
 		begin
 			level = 2'b01;
+			level_reset = 1;
 			color_mapper_select =2'b01;
 		end
 		Level_2_Wait:
 		begin
 			level = 2'b01;
+			level_reset = 0;
 			color_mapper_select =2'b01;
 		end
 		Level_3_Setup:
 		begin
 			level = 2'b10;
+			level_reset = 1;
 			color_mapper_select =2'b10;
 		end
 		Level_3_Wait:
 		begin
 			level = 2'b10;
+			level_reset = 0;
 			color_mapper_select =2'b10;
 		end
 		Lost:
 		begin
 			level = 2'b00;
+			level_reset = 0;
 			color_mapper_select = 2'b11;
 		end
 		Won:
 		begin
 			level = 2'b00;
+			level_reset = 0;
 			color_mapper_select = 2'b11;
 		end
 		default:
 		begin
 			level = 2'b00;
+			level_reset = 0;
 			color_mapper_select = 2'b00;
 		end
 		

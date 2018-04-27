@@ -132,6 +132,7 @@ module space_invaders( input               CLOCK_50,
 	logic [1:0] level, color_mapper_select;
 
 	logic [7:0] VGA_R_LEV[4], VGA_G_LEV[4], VGA_B_LEV[4];
+	logic level_reset;
 
 	int_driver int_driver_0 (score % 10, HEX0);
 	int_driver int_driver_1 (score / 10, HEX1);
@@ -147,9 +148,9 @@ module space_invaders( input               CLOCK_50,
 		is_lost = is_lost_lev[level];
 	end
 	 
-	level_1 level_1_instance(.*, .VGA_R(VGA_R_LEV[0]), .VGA_G(VGA_G_LEV[0]), .VGA_B(VGA_B_LEV[0]), .is_lost(is_lost_lev[0]), .is_won(is_won_lev[0]), .score(score_lev[0]));
+	level_1 level_1_instance(.*, .reset_h(reset_h || level_reset), .VGA_R(VGA_R_LEV[0]), .VGA_G(VGA_G_LEV[0]), .VGA_B(VGA_B_LEV[0]), .is_lost(is_lost_lev[0]), .is_won(is_won_lev[0]), .score(score_lev[0]));
 
-	level_2 level_2_instance(.*, .Reset(reset_h), .frame_clk(VGA_VS), .VGA_R(VGA_R_LEV[1]), .VGA_G(VGA_G_LEV[1]), .VGA_B(VGA_B_LEV[1]), .is_lost(is_lost_lev[1]), .is_won(is_won_lev[1]), .score(score_lev[1]));
+	level_2 level_2_instance(.*, .Reset(reset_h || level_reset), .frame_clk(VGA_VS), .VGA_R(VGA_R_LEV[1]), .VGA_G(VGA_G_LEV[1]), .VGA_B(VGA_B_LEV[1]), .is_lost(is_lost_lev[1]), .is_won(is_won_lev[1]), .score(score_lev[1]));
 
 	// TODO: Level 3
 	 
