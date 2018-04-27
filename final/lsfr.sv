@@ -1,4 +1,4 @@
-module (input Clk, Reset, 
+module lsfr(input Clk, Reset, 
 		input [7:0] seed,
 		output [7:0] q);
 

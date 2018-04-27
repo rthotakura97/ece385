@@ -6,7 +6,7 @@ module level_2(input Reset, Clk, shoot, left, right, frame_clk,
 	parameter hitbox_threshold = 10'd20;
 	logic is_player;
 	logic [9:0] player_x_pos, player_y_pos;
-	logic [9:0] projectile_y_pos[3], projectile_x_pos[3], alien_projectile_x_pos[3], alien_projectile_y_pos[3];
+	logic [9:0] projectile_y_pos[10], projectile_x_pos[10], alien_projectile_x_pos[10], alien_projectile_y_pos[10];
 
 	logic is_hit[10][3], is_alien[10], is_missile[3], is_alien_hit[10], is_alien_oob[10];
 	logic [9:0] alien_x_pos[10], alien_y_pos[10];
@@ -89,16 +89,16 @@ module level_2(input Reset, Clk, shoot, left, right, frame_clk,
 
 	logic [7:0] pseudo[10];
 	
-	lsfr rand0(.Clk(frame_clk), .Reset, .seed(231), .q(pseudo[0]);
-	lsfr rand1(.Clk(frame_clk), .Reset, .seed(21), .q(pseudo[1]);
-	lsfr rand2(.Clk(frame_clk), .Reset, .seed(31), .q(pseudo[2]);
-	lsfr rand3(.Clk(frame_clk), .Reset, .seed(23), .q(pseudo[3]);
-	lsfr rand4(.Clk(frame_clk), .Reset, .seed(1), .q(pseudo[4]);
-	lsfr rand5(.Clk(frame_clk), .Reset, .seed(88), .q(pseudo[5]);
-	lsfr rand6(.Clk(frame_clk), .Reset, .seed(22), .q(pseudo[6]);
-	lsfr rand7(.Clk(frame_clk), .Reset, .seed(63), .q(pseudo[7]);
-	lsfr rand8(.Clk(frame_clk), .Reset, .seed(90), .q(pseudo[8]);
-	lsfr rand9(.Clk(frame_clk), .Reset, .seed(131), .q(pseudo[9]);
+	lsfr rand0(.Clk(frame_clk), .Reset, .seed(231), .q(pseudo[0]));
+	lsfr rand1(.Clk(frame_clk), .Reset, .seed(21), .q(pseudo[1]));
+	lsfr rand2(.Clk(frame_clk), .Reset, .seed(31), .q(pseudo[2]));
+	lsfr rand3(.Clk(frame_clk), .Reset, .seed(23), .q(pseudo[3]));
+	lsfr rand4(.Clk(frame_clk), .Reset, .seed(1), .q(pseudo[4]));
+	lsfr rand5(.Clk(frame_clk), .Reset, .seed(88), .q(pseudo[5]));
+	lsfr rand6(.Clk(frame_clk), .Reset, .seed(22), .q(pseudo[6]));
+	lsfr rand7(.Clk(frame_clk), .Reset, .seed(63), .q(pseudo[7]));
+	lsfr rand8(.Clk(frame_clk), .Reset, .seed(90), .q(pseudo[8]));
+	lsfr rand9(.Clk(frame_clk), .Reset, .seed(131), .q(pseudo[9]));
 
 	always_ff @ (posedge frame_clk) begin
 		alien_shoot_signal[0] <= (pseudo[0] == 1);
