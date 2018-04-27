@@ -143,7 +143,7 @@ module space_invaders( input               CLOCK_50,
 		VGA_R = VGA_R_LEV[color_mapper_select];
 		VGA_G = VGA_G_LEV[color_mapper_select];
 		VGA_B = VGA_B_LEV[color_mapper_select];
-		score = score_lev[level];
+		score = score_lev[0] + score_lev[1] + score_lev[2];
 		is_won = is_won_lev[level];
 		is_lost = is_lost_lev[level];
 	end
@@ -152,6 +152,7 @@ module space_invaders( input               CLOCK_50,
 
 	level_2 level_2_instance(.*, .Reset(reset_h || level_reset), .frame_clk(VGA_VS), .VGA_R(VGA_R_LEV[1]), .VGA_G(VGA_G_LEV[1]), .VGA_B(VGA_B_LEV[1]), .is_lost(is_lost_lev[1]), .is_won(is_won_lev[1]), .score(score_lev[1]));
 
+	level_3 level_3_instance(.*, .Reset(reset_h || level_reset), .frame_clk(VGA_VS), .VGA_R(VGA_R_LEV[2]), .VGA_G(VGA_G_LEV[2]), .VGA_B(VGA_B_LEV[2]), .is_lost(is_lost_lev[2]), .is_won(is_won_lev[2]), .score(score_lev[2]));
 	// TODO: Level 3
 	 
 	// TODO: End of game color mapper
