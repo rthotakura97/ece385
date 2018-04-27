@@ -1,4 +1,4 @@
-module state_machine (input Clk, Reset, Run, is_lost, is_won,
+module state_machine (input Clk, Reset, is_lost, is_won,
 					  output level_reset,
 					  output [1:0] level, color_mapper_select
 					);
@@ -32,6 +32,7 @@ begin
 		Level_3_Wait: begin
 						   if(is_lost) next_state = Lost;
 							if(is_won) next_state = Won;
+						  end
 		Won: if(Reset) next_state = Start;
 		Lost: if(Reset) next_state = Start;
 	endcase

@@ -1,8 +1,7 @@
 module player (input Clk,
 					 Reset,
 					 frame_clk, left, right,
-			   input [7:0] keycode,
-				input [9:0] DrawX, DrawY,
+					 input [9:0] DrawX, DrawY,
 			   output logic [9:0] player_x_pos, player_y_pos,
 				output is_player
 		   );

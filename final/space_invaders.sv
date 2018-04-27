@@ -153,7 +153,7 @@ module space_invaders( input               CLOCK_50,
 	level_2 level_2_instance(.*, .Reset(reset_h || level_reset), .frame_clk(VGA_VS), .VGA_R(VGA_R_LEV[1]), .VGA_G(VGA_G_LEV[1]), .VGA_B(VGA_B_LEV[1]), .is_lost(is_lost_lev[1]), .is_won(is_won_lev[1]), .score(score_lev[1]));
 
 	level_3 level_3_instance(.*, .Reset(reset_h || level_reset), .frame_clk(VGA_VS), .VGA_R(VGA_R_LEV[2]), .VGA_G(VGA_G_LEV[2]), .VGA_B(VGA_B_LEV[2]), .is_lost(is_lost_lev[2]), .is_won(is_won_lev[2]), .score(score_lev[2]));
-	// TODO: Level 3
 	 
-	// TODO: End of game color mapper
+	color_mapper_end endgame_mapper(.*,.VGA_R(VGA_R_LEV[3]), .VGA_G(VGA_G_LEV[3]), .VGA_B(VGA_B_LEV[3]));
+	
 endmodule

@@ -71,9 +71,9 @@ module  color_mapper ( input              is_player,            // Whether curre
 			  else 
 			  begin
 					// Background with nice color gradient
-					Red = 8'h3f; 
+					Red = 8'h00; 
 					Green = 8'h00;
-					Blue = 8'h7f - {1'b0, DrawX[9:3]};
+					Blue = 8'h00;
 			  end
 		end
     end 
