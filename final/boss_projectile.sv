@@ -1,18 +1,20 @@
-module alien_projectile (input Clk,
+module boss_projectile (input Clk,
 								Reset,
 								shoot,
 								frame_clk, is_hit,
+						  input [2:0] projectile_x_step, projectile_y_step,
 						  input [9:0] DrawX, DrawY,
 						  input [9:0] alien_x_pos, alien_y_pos,
 						  output is_missile,
 						  output [9:0] projectile_y_pos, projectile_x_pos
 					  );
 
-	parameter [9:0] projectile_step = 10'd4;
 	parameter [9:0] projectile_size = 10'd3;
 	parameter [9:0] projectile_y_max = 10'd480;
+	parameter [9:0] projectile_x_min = 10'd4;
+	parameter [9:0] projectile_x_max = 10'd636;
 
-	logic [9:0] projectile_y_motion, projectile_x_pos_in, projectile_y_pos_in, projectile_y_motion_in;
+	logic [9:0] projectile_y_motion, projectile_x_motion, projectile_x_motion_in, projectile_x_pos_in, projectile_y_pos_in, projectile_y_motion_in;
 		
 	logic is_showing;
 	logic is_showing_in;
@@ -31,6 +33,7 @@ module alien_projectile (input Clk,
 			is_showing <= 10'b0;
 			projectile_x_pos <= 10'b0;
 			projectile_y_pos <= 10'b0;
+			projectile_x_motion <= 10'b0;
 			projectile_y_motion <= 10'b0;
 			is_hit_curr <= 10'b0;
 		end
@@ -39,6 +42,7 @@ module alien_projectile (input Clk,
 			is_showing <= is_showing_in;
 			projectile_x_pos <= projectile_x_pos_in;
 			projectile_y_pos <= projectile_y_pos_in;
+			projectile_x_motion <= projectile_x_motion_in;
 			projectile_y_motion <= projectile_y_motion_in;
 			is_hit_curr <= is_hit_in;
 		end
@@ -49,6 +53,7 @@ module alien_projectile (input Clk,
 		is_showing_in = is_showing;
 		projectile_x_pos_in = projectile_x_pos;
 		projectile_y_pos_in = projectile_y_pos;
+		projectile_x_motion_in = projectile_x_motion;
 		projectile_y_motion_in = projectile_y_motion;
 
 		if (is_hit)
@@ -59,6 +64,7 @@ module alien_projectile (input Clk,
 		if (is_hit_curr)
 			begin
 				is_showing_in = 1'b0;
+				projectile_x_motion_in = 10'b0;
 				projectile_y_motion_in = 10'b0;
 				projectile_x_pos_in = 10'b0;
 				projectile_y_pos_in = 10'b0;
@@ -70,7 +76,7 @@ module alien_projectile (input Clk,
 		begin
 			if (is_showing == 1'b1) // Moving down
 			begin
-				if (projectile_y_pos + projectile_size >= projectile_y_max) // Missle stops
+				if (projectile_y_pos + projectile_size >= projectile_y_max || projectile_x_pos <= projectile_x_min + projectile_size || projectile_x_pos + projectile_size >= projectile_x_max) // Missle stops
 				begin
 					is_showing_in = 1'b0;
 					projectile_y_motion_in = 10'b0;
@@ -80,8 +86,10 @@ module alien_projectile (input Clk,
 				end
 				else
 				begin
-					projectile_y_motion_in = projectile_step;
+					projectile_y_motion_in = projectile_y_step;
+					projectile_x_motion_in = projectile_x_step;
 					projectile_y_pos_in = projectile_y_pos + projectile_y_motion;
+					projectile_x_pos_in = projectile_x_pos + projectile_x_motion;
 				end
 
 			end
@@ -90,7 +98,8 @@ module alien_projectile (input Clk,
 				is_showing_in = 1'b1;
 				projectile_x_pos_in = alien_x_pos;
 				projectile_y_pos_in = alien_y_pos;
-				projectile_y_motion_in = projectile_step;
+				projectile_x_motion_in = projectile_x_step;
+				projectile_y_motion_in = projectile_y_step;
 			end
 
 		end

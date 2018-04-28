@@ -62,23 +62,6 @@ module player (input Clk,
 			end
 		else
 			player_X_Motion_in = 0;
-			
-			/*case (keycode)
-				8'd80: begin 
-						 if (player_x_pos <= player_X_Min + player_Size)
-							player_X_Motion_in = 0;
-						 else 
-							player_X_Motion_in = (~(player_X_Step) + 1'b1);//left
-						 end
-				8'd79: begin
-						 if (player_x_pos + player_Size >= player_X_Max) 
-							player_X_Motion_in = 0;
-						 else
-							player_X_Motion_in = player_X_Step;//right
-						 end
-				default:player_X_Motion_in = 0;
-			endcase*/
-		
 		player_x_pos_in = player_x_pos + player_X_Motion;
 		end
 	end
