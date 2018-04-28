@@ -37,7 +37,6 @@ module boss (input Clk,
 			boss_x_pos <= boss_x_start;	
 			boss_y_pos <= boss_y_start;	
 			direction <= 1'b0;
-			boss_y_motion <= 10'd0;
 			boss_x_motion <= 10'd0;
 			hit_count = 4'd0;
 		end

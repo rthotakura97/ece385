@@ -50,7 +50,7 @@ module level_2(input Reset, Clk, shoot, left, right, frame_clk,
 	end
 
 	// Color Mapper
-	color_mapper color_instance( .*, .is_missile(is_missile_total), .is_alien(is_alien_total), .end_game_won(is_won), .end_game_lost(is_lost));
+	color_mapper color_instance( .*, .is_missile(is_missile_total), .is_alien(is_alien_total));
 
 	// Player
 	player player_inst(.*);

@@ -60,7 +60,7 @@ module  color_mapper ( input              is_player,            // Whether curre
 					Blue = 8'h00;
 			  end
 		end
-    end 
+
     
 endmodule
 

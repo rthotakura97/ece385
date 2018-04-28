@@ -82,13 +82,13 @@ begin
 		end
 		Lost:
 		begin
-			level = 2'b00;
+			level = 2'b10;
 			level_reset = 0;
 			color_mapper_select = 2'b11;
 		end
 		Won:
 		begin
-			level = 2'b00;
+			level = 2'b10;
 			level_reset = 0;
 			color_mapper_select = 2'b11;
 		end
