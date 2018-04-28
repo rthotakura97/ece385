@@ -7,7 +7,7 @@ module boss (input Clk,
 			 );
 
 	parameter [9:0] boss_x_start = 10'd320;
-	parameter [9:0] boss_y_start = 10'd200;
+	parameter [9:0] boss_y_start = 10'd160;
 	parameter [9:0] boss_x_min = 10'd60;
 	parameter [9:0] boss_x_max = 10'd590;
 	parameter [9:0] boss_x_step = 10'd2;
