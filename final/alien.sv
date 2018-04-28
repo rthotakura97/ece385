@@ -111,10 +111,6 @@ module alien (input Clk,
 					alien_y_motion_in = 0;
 				end
 			endcase
-
-			
-
-
 			alien_x_pos_in = alien_x_pos + alien_x_motion;
 			alien_y_pos_in = alien_y_pos + alien_y_motion;
 		end

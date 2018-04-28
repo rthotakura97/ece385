@@ -17,8 +17,6 @@
 module  color_mapper ( input              is_player,            // Whether current pixel belongs to ball 
 										  is_missile,
 										  is_alien,
-										  end_game_won, 
-										  end_game_lost,
                                                               //   or background (computed in ball.sv)
                        input        [9:0] DrawX, DrawY,       // Current pixel coordinates
                        output logic [7:0] VGA_R, VGA_G, VGA_B // VGA RGB output
@@ -34,19 +32,6 @@ module  color_mapper ( input              is_player,            // Whether curre
     // Assign color based on is_ball signal
     always_comb
     begin
-		 if(end_game_won)
-		 begin
-				Red = 8'h7f - {1'b0, DrawX[9:3]}; 
-				Green = 8'hb0;
-				Blue = 8'h8a;
-		 end
-		 else if(end_game_lost)
-		 begin
-				Red = 8'hff;
-				Green = 8'h00;
-				Blue = 8'h00;
-		 end
-		 else begin
 		 if (is_missile == 1'b1)
 			begin
 				// Red Ball
@@ -70,7 +55,6 @@ module  color_mapper ( input              is_player,            // Whether curre
 			end
 			  else 
 			  begin
-					// Background with nice color gradient
 					Red = 8'h00; 
 					Green = 8'h00;
 					Blue = 8'h00;
