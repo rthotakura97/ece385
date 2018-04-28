@@ -4,6 +4,7 @@ module level_3(input Reset, Clk, shoot, left, right, frame_clk,
 			   output is_lost, is_won,
 			   output int score);
 	parameter hitbox_threshold = 10'd50;
+	parameter player_threshold = 10'd20;
 	logic is_player;
 	logic [9:0] player_x_pos, player_y_pos;
 	logic [9:0] projectile_y_pos[3], projectile_x_pos[3];
