@@ -11,7 +11,7 @@ module alien (input Clk,
 	parameter [9:0] alien_x_min = 10'd10;
 	parameter [9:0] alien_x_max = 10'd629;
 	parameter [9:0] alien_y_max = 10'd450;
-	parameter [9:0] alien_x_step = 10'd1;
+	parameter [9:0] alien_x_step = 10'd3;
 	parameter [9:0] alien_y_step = 10'd80;
 	parameter [9:0] alien_size = 10'd4;
 
