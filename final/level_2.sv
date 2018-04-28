@@ -3,7 +3,7 @@ module level_2(input Reset, Clk, shoot, left, right, frame_clk,
 			   output [7:0] VGA_R, VGA_B, VGA_G,
 			   output is_lost, is_won,
 			   output int score);
-	parameter hitbox_threshold = 10'd10;
+	parameter hitbox_threshold = 10'd20;
 	logic is_player;
 	logic [9:0] player_x_pos, player_y_pos;
 	logic [9:0] projectile_y_pos[10], projectile_x_pos[10], alien_projectile_x_pos[10], alien_projectile_y_pos[10];
