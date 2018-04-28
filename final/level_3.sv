@@ -8,7 +8,7 @@ module level_3(input Reset, Clk, shoot, left, right, frame_clk,
 	logic [9:0] player_x_pos, player_y_pos;
 	logic [9:0] projectile_y_pos[3], projectile_x_pos[3];
 
-	logic is_boss_hit_total, is_boss, is_boss_dead, is_missile[3];
+	logic is_boss_hit_total, is_boss, is_boss_dead, is_missile[3], is_alien_missile[3];
 	logic [9:0] boss_x_pos, boss_y_pos;
 
 	logic is_missile_total;
@@ -26,7 +26,7 @@ module level_3(input Reset, Clk, shoot, left, right, frame_clk,
 		is_hit_missile[2] = is_hit[2];
 		
 		is_boss_hit_total = is_hit[0] || is_hit[1] || is_hit[2];
-		is_missile_total = is_missile[0] || is_missile[1] || is_missile[2];
+		is_missile_total = is_missile[0] || is_missile[1] || is_missile[2] || is_alien_missile[0] || is_alien_missile[1] || is_alien_missile[2];
 	end
 
 	// Color Mapper
@@ -49,6 +49,19 @@ module level_3(input Reset, Clk, shoot, left, right, frame_clk,
 	boss boss_inst(.*, .is_hit(is_boss_hit_total));
 	
 	// Boss missiles
+	
+	logic [7:0] pseudo[3];
+	logic shoot_signal[3];
+	
+	lsfr rand0(.Clk(frame_clk), .Reset, .seed(231), .q(pseudo[0]));
+
+	always_ff @ (posedge frame_clk) begin
+		shoot_signal[0] <= (pseudo[0] == 1);
+	end
+
+	boss_projectile boss_missile0(.*, .shoot(shoot_signal[0]), .is_hit(), .projectile_x_step('d3), .projectile_y_step('d1), .is_missile(is_alien_missile[0]), .projectile_y_pos(), .projectile_x_pos());
+	boss_projectile boss_missile1(.*, .shoot(shoot_signal[0]), .is_hit(), .projectile_x_step('d3), .projectile_y_step(0), .is_missile(is_alien_missile[1]), .projectile_y_pos(), .projectile_x_pos());
+	boss_projectile boss_missile2(.*, .shoot(shoot_signal[0]), .is_hit(), .projectile_x_step('d3), .projectile_y_step(~('d1) + 1), .is_missile(is_alien_missile[2]), .projectile_y_pos(), .projectile_x_pos());
 	
 	// Hitboxes
 	// Player hitboxes

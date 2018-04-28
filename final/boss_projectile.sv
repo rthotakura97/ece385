@@ -4,7 +4,7 @@ module boss_projectile (input Clk,
 								frame_clk, is_hit,
 						  input [2:0] projectile_x_step, projectile_y_step,
 						  input [9:0] DrawX, DrawY,
-						  input [9:0] alien_x_pos, alien_y_pos,
+						  input [9:0] boss_x_pos, boss_y_pos,
 						  output is_missile,
 						  output [9:0] projectile_y_pos, projectile_x_pos
 					  );
@@ -96,8 +96,8 @@ module boss_projectile (input Clk,
 			else if (shoot == 1'b1) // Start moving
 			begin
 				is_showing_in = 1'b1;
-				projectile_x_pos_in = alien_x_pos;
-				projectile_y_pos_in = alien_y_pos;
+				projectile_x_pos_in = boss_x_pos;
+				projectile_y_pos_in = boss_y_pos;
 				projectile_x_motion_in = projectile_x_step;
 				projectile_y_motion_in = projectile_y_step;
 			end
