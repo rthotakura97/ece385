@@ -81,6 +81,7 @@ module boss_projectile (input Clk,
 				begin
 					is_showing_in = 1'b0;
 					projectile_y_motion_in = 10'b0;
+					projectile_x_motion_in = 10'b0;
 					projectile_x_pos_in = 10'b0;
 					projectile_y_pos_in = 10'b0;
 					is_hit_in = 1'b0;
@@ -88,7 +89,7 @@ module boss_projectile (input Clk,
 				else
 				begin
 					projectile_y_motion_in = projectile_y_step;
-					if (negative_x) begin
+					if (negative_x == 1) begin
 						projectile_x_motion_in = ~(projectile_x_step) + 1;
 					end
 					else begin
@@ -104,7 +105,7 @@ module boss_projectile (input Clk,
 				is_showing_in = 1'b1;
 				projectile_x_pos_in = boss_x_pos;
 				projectile_y_pos_in = boss_y_pos;
-				if (negative_x) begin
+				if (negative_x == 1) begin
 					projectile_x_motion_in = ~(projectile_x_step) + 1;
 				end
 				else begin

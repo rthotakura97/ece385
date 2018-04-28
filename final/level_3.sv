@@ -61,7 +61,7 @@ module level_3(input Reset, Clk, shoot, left, right, frame_clk,
 
 	boss_projectile boss_missile0(.*, .shoot(shoot_signal[0]), .is_hit(), .negative_x(0), .projectile_x_step('d0), .projectile_y_step('d3), .is_missile(is_alien_missile[0]), .projectile_y_pos(), .projectile_x_pos());
 	boss_projectile boss_missile1(.*, .shoot(shoot_signal[0]), .is_hit(), .negative_x(0), .projectile_x_step('d1), .projectile_y_step('d3), .is_missile(is_alien_missile[1]), .projectile_y_pos(), .projectile_x_pos());
-	boss_projectile boss_missile2(.*, .shoot(shoot_signal[0]), .is_hit(), .negative_x(0), .projectile_x_step('d1), .projectile_y_step('d3), .is_missile(is_alien_missile[2]), .projectile_y_pos(), .projectile_x_pos());
+	boss_projectile boss_missile2(.*, .shoot(shoot_signal[0]), .is_hit(), .negative_x(1), .projectile_x_step('d1), .projectile_y_step('d3), .is_missile(is_alien_missile[2]), .projectile_y_pos(), .projectile_x_pos());
 	
 	// Hitboxes
 	// Player hitboxes
