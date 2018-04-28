@@ -2,6 +2,7 @@ module boss_projectile (input Clk,
 								Reset,
 								shoot,
 								frame_clk, is_hit,
+								negative_x,
 						  input [2:0] projectile_x_step, projectile_y_step,
 						  input [9:0] DrawX, DrawY,
 						  input [9:0] boss_x_pos, boss_y_pos,
@@ -87,7 +88,12 @@ module boss_projectile (input Clk,
 				else
 				begin
 					projectile_y_motion_in = projectile_y_step;
-					projectile_x_motion_in = projectile_x_step;
+					if (negative_x) begin
+						projectile_x_motion_in = ~(projectile_x_step) + 1;
+					end
+					else begin
+						projectile_x_motion_in = projectile_x_step;
+					end
 					projectile_y_pos_in = projectile_y_pos + projectile_y_motion;
 					projectile_x_pos_in = projectile_x_pos + projectile_x_motion;
 				end
@@ -98,7 +104,12 @@ module boss_projectile (input Clk,
 				is_showing_in = 1'b1;
 				projectile_x_pos_in = boss_x_pos;
 				projectile_y_pos_in = boss_y_pos;
-				projectile_x_motion_in = projectile_x_step;
+				if (negative_x) begin
+					projectile_x_motion_in = ~(projectile_x_step) + 1;
+				end
+				else begin
+					projectile_x_motion_in = projectile_x_step;
+				end
 				projectile_y_motion_in = projectile_y_step;
 			end
 
