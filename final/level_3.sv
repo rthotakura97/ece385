@@ -32,7 +32,7 @@ module level_3(input Reset, Clk, shoot, left, right, frame_clk,
 	end
 
 	// Color Mapper
-	color_mapper colormapper(.*, .is_alien(is_boss), .is_missile(is_missile_total));
+	color_mapper colormapper(.*, .is_alien(is_boss), .is_missile(is_missile_total), .level(3));
 
 	// Player
 	player player_inst(.*);

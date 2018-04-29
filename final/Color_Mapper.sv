@@ -17,38 +17,70 @@
 module  color_mapper ( input              is_player,            // Whether current pixel belongs to ball 
 										  is_missile,
 										  is_alien,
+					   input [1:0] 	      level,
                                                               //   or background (computed in ball.sv)
                        input        [9:0] DrawX, DrawY,       // Current pixel coordinates
                        output logic [7:0] VGA_R, VGA_G, VGA_B // VGA RGB output
                      );
     
     logic [7:0] Red, Green, Blue;
+	logic [7:0] addr;
+	logic [7:0] data;
     
     // Output colors to VGA
     assign VGA_R = Red;
     assign VGA_G = Green;
     assign VGA_B = Blue;
+
+	// Partition 16x8 for level
+	// StartY = 450
+	// EndY = 466
+	// StartX = 40
+	// EndX = 48
+	// Partition 16x16 for score
+	
+	font_rom fonts(.*);
     
+	logic should_draw;
+	int diffX, diffY;
+	//int offset;
     // Assign color based on is_ball signal
     always_comb
     begin
-		 if (is_missile == 1'b1)
+		//offset = level << 4;
+		addr = 0;
+		should_draw = 0;
+		// Level partition
+		if (DrawY <= 466 && DrawY >= 450 && DrawX <= 48 && DrawX >= 40) begin
+			diffY = DrawY - 450;
+			addr = diffY; // + offset
+			diffX = DrawX - 40;
+			should_draw = data[diffX];
+			if (should_draw) begin
+				Red = 8'hff;
+				Green = 8'hff;
+				Blue = 8'hff;
+			end
+			else begin
+				Red = 8'h00;
+				Green = 8'h00;
+				Blue = 8'h00;
+			end
+		end
+		else if (is_missile == 1'b1)
 			begin
-				// Red Ball
 					Red = 8'hff;
 					Green = 8'h0;
 					Blue = 8'h0;
 			end
 			  else if (is_player == 1'b1) 
 			  begin
-					// White ball
 					Red = 8'hff;
 					Green = 8'hff;
 					Blue = 8'hff;
 			  end
 			else if (is_alien == 1'b1)
 			begin
-					// Green ball
 					Red = 8'h00;
 					Green = 8'hff;
 					Blue = 8'h00;
