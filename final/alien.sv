@@ -157,11 +157,11 @@ module alien (input Clk,
 		DistXtemp = (alien_x_pos - DrawX) / 3;
 		DistYtemp = (alien_y_pos - DrawY) / 3;
 		if (DrawX > alien_x_pos)
-			DistX = DistXtemp * -1;
+			DistX = ~(DistXtemp) + 1;
 		else
 			DistX = DistXtemp;
 		if (DrawY > alien_y_pos)
-			DistY = DistYtemp * -1;
+			DistY = ~(DistYtemp) + 1;
 		else
 			DistY = DistYtemp;
 
