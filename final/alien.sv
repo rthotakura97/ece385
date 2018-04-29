@@ -135,13 +135,45 @@ module alien (input Clk,
 	// 0 0 0 1 1 0 1 1 0 0 0
 	//
 	int DistX, DistY, Size;
-   assign DistX = DrawX - alien_x_pos;
-   assign DistY = DrawY - alien_y_pos;
-   assign Size = alien_size;
-   always_comb begin
-        if ( ( DistX*DistX + DistY*DistY) <= (Size*Size) && !is_hit_curr ) 
-            is_alien = 1'b1;
-        else
-            is_alien = 1'b0;
+	assign DistX = alien_x_pos - DrawX;
+	assign DistY = alien_y_pos - DrawY;
+   	always_comb begin
+		is_alien = 0;
+		if (!is_hit_curr) begin
+			case (DistY)
+				case 3: begin
+					if (DistX == 3 || DistX == -3)
+						is_alien = 1;
+				end
+				case 2: begin
+					if (DistX == 2 || DistX == -2)
+						is_alien = 1;
+				end
+				case 1: begin
+					if (DistX <= 3 && DistX >= -3)
+						is_alien = 1;
+				end
+				case 0: begin
+					if (DistX == -4 || DistX == -3 || DistX == -1 || DistX == 0 || DistX == 1 || DistX == 3 || DistX == 4)
+						is_alien = 1;
+				end
+				case -1: begin
+					is_alien = 1;
+				end
+				case -2: begin
+					if (DistX != 4 || DistX != -4)
+						is_alien = 1;
+				end
+				case -3: begin
+					if (DistX == 5 || DistX == 3 || DistX == -3 || DistX == -5)
+						is_alien = 1;
+				end
+				case -4: begin
+					if (DistX <= 2 && DistX >= -2 && DistX != 0)
+						is_alien = 1;
+				end
+				default: is_alien = 0;
+			endcase
+		end
     end
 endmodule
