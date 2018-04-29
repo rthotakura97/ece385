@@ -152,18 +152,10 @@ module alien (input Clk,
 	// 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 -4
 	// 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0
 	int DistX, DistY;
-	int DistXtemp, DistYtemp;
+//	int DistXtemp, DistYtemp;
    	always_comb begin
-		DistXtemp = (alien_x_pos - DrawX) / 3;
-		DistYtemp = (alien_y_pos - DrawY) / 3;
-		if (DrawX > alien_x_pos)
-			DistX = ~(DistXtemp) + 1;
-		else
-			DistX = DistXtemp;
-		if (DrawY > alien_y_pos)
-			DistY = ~(DistYtemp) + 1;
-		else
-			DistY = DistYtemp;
+		DistX = (alien_x_pos - DrawX) / 2;
+		DistY = (alien_y_pos - DrawY) / 2;
 
 		is_alien = 0;
 		if (!is_hit_curr) begin
