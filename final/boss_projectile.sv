@@ -10,7 +10,7 @@ module boss_projectile (input Clk,
 						  output [9:0] projectile_y_pos, projectile_x_pos
 					  );
 
-	parameter [9:0] projectile_size = 10'd3;
+	parameter [9:0] projectile_size = 10'd2;
 	parameter [9:0] projectile_y_max = 10'd480;
 	parameter [9:0] projectile_x_min = 10'd4;
 	parameter [9:0] projectile_x_max = 10'd636;

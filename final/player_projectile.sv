@@ -9,7 +9,7 @@ module player_projectile (input Clk,
 					  );
 
 	parameter [9:0] projectile_step = ~(10'd4) + 1'b1;
-	parameter [9:0] projectile_size = 10'd3;
+	parameter [9:0] projectile_size = 10'd2;
 	parameter [9:0] projectile_y_min = 10'd0;
 
 	logic [9:0] projectile_y_motion, projectile_x_pos_in, projectile_y_pos_in,
