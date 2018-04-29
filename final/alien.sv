@@ -122,6 +122,18 @@ module alien (input Clk,
 		end
 	end
 
+	// Picture 8x11
+	// Center is in 4,6 (one indexed)
+	//
+	// 0 0 1 0 0 0 0 0 1 0 0
+	// 0 0 0 1 0 0 0 1 0 0 0
+	// 0 0 1 1 1 1 1 1 1 0 0
+	// 0 1 1 0 1 C 1 0 1 1 0
+	// 1 1 1 1 1 1 1 1 1 1 1
+	// 1 0 1 1 1 1 1 1 1 0 1
+	// 1 0 1 0 0 0 0 0 1 0 1
+	// 0 0 0 1 1 0 1 1 0 0 0
+	//
 	int DistX, DistY, Size;
    assign DistX = DrawX - alien_x_pos;
    assign DistY = DrawY - alien_y_pos;
