@@ -141,35 +141,35 @@ module alien (input Clk,
 		is_alien = 0;
 		if (!is_hit_curr) begin
 			case (DistY)
-				case 3: begin
+				3: begin
 					if (DistX == 3 || DistX == -3)
 						is_alien = 1;
 				end
-				case 2: begin
+				2: begin
 					if (DistX == 2 || DistX == -2)
 						is_alien = 1;
 				end
-				case 1: begin
+				1: begin
 					if (DistX <= 3 && DistX >= -3)
 						is_alien = 1;
 				end
-				case 0: begin
+				0: begin
 					if (DistX == -4 || DistX == -3 || DistX == -1 || DistX == 0 || DistX == 1 || DistX == 3 || DistX == 4)
 						is_alien = 1;
 				end
-				case -1: begin
+				-1: begin
 					if (DistX >= -5 && DistX <= 5)
 						is_alien = 1;
 				end
-				case -2: begin
+				-2: begin
 					if (DistX == -5 || DistX == 5 || (DistX >= -3 && DistX <= 3))
 						is_alien = 1;
 				end
-				case -3: begin
+				-3: begin
 					if (DistX == 5 || DistX == 3 || DistX == -3 || DistX == -5)
 						is_alien = 1;
 				end
-				case -4: begin
+				-4: begin
 					if (DistX <= 2 && DistX >= -2 && DistX != 0)
 						is_alien = 1;
 				end
