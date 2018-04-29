@@ -66,6 +66,16 @@ module player (input Clk,
 		end
 	end
 	
+	// Picture 6x11
+	// Center is in 3,6 (one-indexed) 
+	//
+	// 0 0 0 0 0 1 0 0 0 0 0
+	// 0 0 0 0 1 1 1 0 0 0 0
+	// 0 1 1 1 1 1 1 1 1 1 0 
+	// 1 1 1 1 1 1 1 1 1 1 1
+	// 1 1 1 1 1 1 1 1 1 1 1
+	// 1 1 1 1 1 1 1 1 1 1 1
+	
 	int DistX, DistY, Size;
    assign DistX = DrawX - player_x_pos;
    assign DistY = DrawY - player_y_pos;
