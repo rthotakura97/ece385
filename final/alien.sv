@@ -13,7 +13,7 @@ module alien (input Clk,
 	parameter [9:0] alien_y_max = 10'd450;
 	parameter [9:0] alien_x_step = 10'd3;
 	parameter [9:0] alien_y_step = 10'd80;
-	parameter [9:0] alien_size = 10'd4;
+	parameter [9:0] alien_size = 10'd15;
 
 	//logic [9:0] alien_x_pos, alien_y_pos;
 	logic [9:0] alien_x_pos_in, alien_y_pos_in;
@@ -150,7 +150,7 @@ module alien (input Clk,
 	// 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 -4
 	// 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0
 	// 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0
-	int DistX, DistY, Size;
+	int DistX, DistY;
 	assign DistX = (alien_x_pos - DrawX) / 3;
 	assign DistY = (alien_y_pos - DrawY) / 3;
    	always_comb begin
