@@ -158,10 +158,11 @@ module alien (input Clk,
 						is_alien = 1;
 				end
 				case -1: begin
-					is_alien = 1;
+					if (DistX >= -5 && DistX <= 5)
+						is_alien = 1;
 				end
 				case -2: begin
-					if (DistX != 4 || DistX != -4)
+					if (DistX == -5 || DistX == 5 || (DistX >= -3 && DistX <= 3))
 						is_alien = 1;
 				end
 				case -3: begin

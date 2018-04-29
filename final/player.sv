@@ -71,23 +71,24 @@ module player (input Clk,
 	//
 	// 0 0 0 0 0 1 0 0 0 0 0
 	// 0 0 0 0 1 1 1 0 0 0 0
-	// 0 1 1 1 1 1 1 1 1 1 0 
+	// 0 1 1 1 1 C 1 1 1 1 0 
 	// 1 1 1 1 1 1 1 1 1 1 1
 	// 1 1 1 1 1 1 1 1 1 1 1
 	// 1 1 1 1 1 1 1 1 1 1 1
 	
 	int DistX, DistY, Size;
-   assign DistX = DrawX - player_x_pos;
-   assign DistY = DrawY - player_y_pos;
-   assign Size = player_Size;
-   always_comb begin
-        if ( ( DistX*DistX + DistY*DistY) <= (Size*Size) ) 
-            is_player = 1'b1;
-        else
-            is_player = 1'b0;
-        /* The ball's (pixelated) circle is generated using the standard circle formula.  Note that while 
-           the single line is quite powerful descriptively, it causes the synthesis tool to use up three
-           of the 12 available multipliers on the chip! */
+	assign DistX = player_x_pos - DrawX;
+   	assign DistY = player_y_pos - DrawY;
+   	always_comb begin
+		is_player = 0;
+		if (DistY == 2 && DistX == 0)
+			is_player = 1;
+		else if (DistY == 1 && DistX <= 1 && DistX >= -1)
+			is_player = 1;
+		else if (DistY == 0 && DistX <= 4 && DistX >= -4)
+			is_player = 1;
+		else if (DistY >= -3 && DistY <= -1 && DistX <= 5 && DistX >= -5)
+			is_player = 1;
     end
 
 endmodule
