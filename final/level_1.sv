@@ -149,7 +149,7 @@ module level_1(input reset_h, Clk, shoot, left, right, VGA_VS,
 
 	// Color_mapper
 										
-	color_mapper color_instance( .is_player,
+	color_mapper color_instance( .score, .is_player,
 								 .is_missile(is_missile_total),
 								 .is_alien(is_alien_total),
 								 .level(1),

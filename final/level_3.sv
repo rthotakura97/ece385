@@ -12,6 +12,8 @@ module level_3(input Reset, Clk, shoot, left, right, frame_clk,
 
 	logic is_boss_hit_total, is_boss, is_boss_dead, is_missile[3], is_alien_missile[15];
 	logic [9:0] boss_x_pos, boss_y_pos;
+	
+	logic [3:0] hit_count;
 
 	logic is_missile_total;
 	logic is_hit_missile[3];
@@ -20,7 +22,7 @@ module level_3(input Reset, Clk, shoot, left, right, frame_clk,
 	logic is_hit[3], is_hit_boss_missile[15];
 
 	always_comb begin
-		score = 0; // TODO: figure out boss score
+		score = 20 + hit_count; // TODO: figure out boss score
 		is_won = is_boss_dead;
 		is_lost = is_hit_boss_missile[0] || is_hit_boss_missile[1] || is_hit_boss_missile[2] || is_hit_boss_missile[3] || is_hit_boss_missile[4] || is_hit_boss_missile[5] || is_hit_boss_missile[6] || is_hit_boss_missile[7] || is_hit_boss_missile[8] || is_hit_boss_missile[9] || is_hit_boss_missile[10] || is_hit_boss_missile[11] || is_hit_boss_missile[12] || is_hit_boss_missile[13] || is_hit_boss_missile[14]; 
 		is_hit_missile[0] = is_hit[0];
@@ -32,7 +34,7 @@ module level_3(input Reset, Clk, shoot, left, right, frame_clk,
 	end
 
 	// Color Mapper
-	color_mapper colormapper(.*, .is_alien(is_boss), .is_missile(is_missile_total), .level(3));
+	color_mapper colormapper(.*,  .is_alien(is_boss), .is_missile(is_missile_total), .level(3));
 
 	// Player
 	player player_inst(.*);

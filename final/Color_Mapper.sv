@@ -17,6 +17,7 @@
 module  color_mapper ( input              is_player,            // Whether current pixel belongs to ball 
 										  is_missile,
 										  is_alien,
+										  input int score,
 					   input [1:0] 	      level,
                                                               //   or background (computed in ball.sv)
                        input        [9:0] DrawX, DrawY,       // Current pixel coordinates
@@ -35,27 +36,35 @@ module  color_mapper ( input              is_player,            // Whether curre
 	// Partition 16x8 for level
 	// StartY = 450
 	// EndY = 466
-	// StartX = 40
-	// EndX = 48
+	// StartX = 584
+	// EndX = 600
 	// Partition 16x16 for score
 	
 	font_rom fonts(.*);
     
 	logic should_draw;
+	int tens;
+	int ones;
+	
 	int diffX, diffY;
-	//int offset;
+	 int offset;
     // Assign color based on is_ball signal
     always_comb
     begin
-		//offset = level << 4;
+		tens = score % 10;
+		ones = score / 10;
+	 
+		offset = level << 4;
+		diffX = 0;
+		diffY = 0;
 		addr = 0;
 		should_draw = 0;
 		// Level partition
-		if (DrawY <= 466 && DrawY >= 450 && DrawX <= 48 && DrawX >= 40) begin
+		if (DrawY <= 465 && DrawY >= 450 && DrawX <= 47 && DrawX >= 40) begin
 			diffY = DrawY - 450;
-			addr = diffY; // + offset
+			addr = diffY + offset;
 			diffX = DrawX - 40;
-			should_draw = data[diffX];
+			should_draw = data[8-diffX];
 			if (should_draw) begin
 				Red = 8'hff;
 				Green = 8'hff;
@@ -67,31 +76,54 @@ module  color_mapper ( input              is_player,            // Whether curre
 				Blue = 8'h00;
 			end
 		end
+		else if (DrawY <= 465 && DrawY >= 450 && DrawX <= 599 && DrawX >= 584) begin
+			diffY = DrawY -450;
+			if(DrawX <= 591) begin
+				addr = diffY + (ones << 4);
+				diffX = DrawX - 584;
+				should_draw = data[8-diffX];
+			end
+			else begin
+				addr = diffY + (tens << 4);
+				diffX = DrawX - 592;
+				should_draw = data[8-diffX];
+			end
+			if (should_draw) begin
+				Red = 8'hff;
+				Green = 8'hff;
+				Blue = 8'hff;
+			end
+			else begin
+				Red = 8'h00;
+				Green = 8'h00;
+				Blue = 8'h00;
+			end			
+		end
 		else if (is_missile == 1'b1)
 			begin
 					Red = 8'hff;
 					Green = 8'h0;
 					Blue = 8'h0;
 			end
-			  else if (is_player == 1'b1) 
-			  begin
-					Red = 8'hff;
-					Green = 8'hff;
-					Blue = 8'hff;
-			  end
-			else if (is_alien == 1'b1)
-			begin
-					Red = 8'h00;
-					Green = 8'hff;
-					Blue = 8'h00;
-			end
-			  else 
-			  begin
-					Red = 8'h00; 
-					Green = 8'h00;
-					Blue = 8'h00;
-			  end
-		end
+	  else if (is_player == 1'b1) 
+	  begin
+			Red = 8'hff;
+			Green = 8'hff;
+			Blue = 8'hff;
+	  end
+	  else if (is_alien == 1'b1)
+	  begin
+	  		Red = 8'h00;
+	  		Green = 8'hff;
+	  		Blue = 8'h00;
+	  end
+	  else 
+	  begin
+			Red = 8'h00; 
+			Green = 8'h00;
+			Blue = 8'h00;
+	  end
+	  end
 
     
 endmodule

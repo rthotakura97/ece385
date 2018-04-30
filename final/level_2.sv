@@ -40,8 +40,8 @@ module level_2(input Reset, Clk, shoot, left, right, frame_clk,
 
 		is_alien_total = is_alien[0] || is_alien[1] || is_alien[2] || is_alien[3] || is_alien[4] || is_alien[5] || is_alien[6] || is_alien[7] || is_alien[8] || is_alien[9];
 
-		score = is_alien_hit[0] + is_alien_hit[1] + is_alien_hit[2] + is_alien_hit[3] + is_alien_hit[4] + is_alien_hit[5] + is_alien_hit[6] + is_alien_hit[7] + is_alien_hit[8] + is_alien_hit[9];
-		is_won = (score == 'd10);
+		score = 10 + is_alien_hit[0] + is_alien_hit[1] + is_alien_hit[2] + is_alien_hit[3] + is_alien_hit[4] + is_alien_hit[5] + is_alien_hit[6] + is_alien_hit[7] + is_alien_hit[8] + is_alien_hit[9];
+		is_won = (score == 'd20);
 		is_lost = is_alien_oob[0] || is_alien_oob[1] || is_alien_oob[2] || is_alien_oob[3] || is_alien_oob[4] || is_alien_oob[5] || is_alien_oob[6] || is_alien_oob[7] || is_alien_oob[8] || is_alien_oob[9] || is_player_hit; 
 		
 		is_missile_total = is_missile[0] || is_missile[1] || is_missile[2] || is_alien_missile[0] || is_alien_missile[1] || is_alien_missile[2] || is_alien_missile[3] || is_alien_missile[4] || is_alien_missile[5] || is_alien_missile[6] || is_alien_missile[7] || is_alien_missile[8] || is_alien_missile[9];

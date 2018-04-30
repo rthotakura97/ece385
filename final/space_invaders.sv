@@ -143,7 +143,7 @@ module space_invaders( input               CLOCK_50,
 		VGA_R = VGA_R_LEV[color_mapper_select];
 		VGA_G = VGA_G_LEV[color_mapper_select];
 		VGA_B = VGA_B_LEV[color_mapper_select];
-		score = score_lev[0] + score_lev[1] + score_lev[2];
+		score = score_lev[level];
 		is_won = is_won_lev[level];
 		is_lost = is_lost_lev[level];
 	end
