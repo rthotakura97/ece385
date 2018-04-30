@@ -4,7 +4,7 @@ module color_mapper_end (input is_won, is_lost,                                /
                        output logic [7:0] VGA_R, VGA_G, VGA_B // VGA RGB output
                      );
     
-	parameter playerCenterX = 320;
+	parameter playerCenterX = 328;
 	parameter playerCenterY = 240;
     logic [7:0] Red, Green, Blue;
 	logic [7:0] addr, data;
@@ -24,7 +24,11 @@ module color_mapper_end (input is_won, is_lost,                                /
 	// x312 - 328
 	//
     always_comb
-    begin
+    begin 
+		diffY = 0;
+		addr = 0;
+		diffX = 0;
+		should_draw = 0;
 		tens = score % 10;
 		ones = score / 10;
 		DistXtemp = (playerCenterX - DrawX);
@@ -55,12 +59,12 @@ module color_mapper_end (input is_won, is_lost,                                /
 				if (should_draw) begin
 					Red = 8'h0;
 					Green = 8'h0;
-					Black = 8'h0;
+					Blue = 8'h0;
 				end
 				else begin
 					Red = 8'hff;
 					Green = 8'hff;
-					Black = 8'hff;
+					Blue = 8'hff;
 				end
 			end
 			else if (DrawX >= 320 && DrawX <= 327 && DrawY >= 240 && DrawY <= 255) begin
@@ -71,12 +75,12 @@ module color_mapper_end (input is_won, is_lost,                                /
 				if (should_draw) begin
 					Red = 8'h0;
 					Green = 8'h0;
-					Black = 8'h0;
+					Blue = 8'h0;
 				end
 				else begin
 					Red = 8'hff;
 					Green = 8'hff;
-					Black = 8'hff;
+					Blue = 8'hff;
 				end
 			end
 			else begin

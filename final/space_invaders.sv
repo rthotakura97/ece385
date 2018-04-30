@@ -88,7 +88,7 @@ module space_invaders( input               CLOCK_50,
     );
      
      // You need to make sure that the port names here match the ports in Qsys-generated codes.
-     /*final_soc nios_system(
+     final_soc nios_system(
                              .clk_clk(Clk),         
                              .reset_reset_n(1'b1),    // Never reset NIOS
                              .sdram_wire_addr(DRAM_ADDR), 
@@ -109,7 +109,7 @@ module space_invaders( input               CLOCK_50,
                              .otg_hpi_r_export(hpi_r),
                              .otg_hpi_w_export(hpi_w),
                              .otg_hpi_reset_export(hpi_reset)
-    );*/
+    );
     
     // Use PLL to generate the 25MHZ VGA_CLK.
     // You will have to generate it on your own in simulation.
