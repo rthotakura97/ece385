@@ -14,6 +14,7 @@ module color_mapper_end (input is_won, is_lost,                                /
     assign VGA_B = Blue;
 	int tens, ones;
 	int DistX, DistY;
+	int DistXtemp, DistYtemp;
     
 	// x312 - 328
 	//
@@ -21,8 +22,10 @@ module color_mapper_end (input is_won, is_lost,                                /
     begin
 		tens = score % 10;
 		ones = score / 10;
-		DistX = (playerCenterX - DrawX) >>> 3;
-		DistY = (playerCenterY - DrawY) >>> 3;
+		DistXtemp = (playerCenterX - DrawX);
+		DistYtemp = (playerCenterY - DrawY);
+		DistX = DistXtemp >>> 4;
+		DistY = DistYtemp >>> 4;
 		if (DistY == 2 && DistX == 0) begin
 			Red = 8'hff;
 			Green = 8'hff;
