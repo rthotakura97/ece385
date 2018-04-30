@@ -55,8 +55,8 @@ module color_mapper_end (input is_won, is_lost,                                /
 		else
 		begin
 			Red = 8'hff;
-			Green = 8'h7a;
-			Blue = 8'h29 - {1'b0, DrawY[4:1]};
+			Green = 8'h7a - {1'b0, DrawX[9:3]};
+			Blue = 8'h09;
 		end
 	end 
 endmodule
