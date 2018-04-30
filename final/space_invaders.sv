@@ -46,7 +46,7 @@ module space_invaders( input               CLOCK_50,
                                  DRAM_CLK      //SDRAM Clock
                     );
     
-   logic reset_h, Clk, shoot, shoot_in, left, right;
+   logic reset_h, Clk, shoot, shoot_in, left, right, right_in, left_in;
    logic [7:0] keycode;
 	logic [9:0] DrawX, DrawY;
 	 
@@ -54,12 +54,14 @@ module space_invaders( input               CLOCK_50,
     always_ff @ (posedge Clk) begin
         reset_h <= ~(KEY[0]);        // The push buttons are active low
 		  shoot <= shoot_in;
-		  left <= ~(KEY[2]);
-		  right <= ~(KEY[1]);
+		  left <= left_in;
+		  right <= right_in;
     end
 
 	always_comb begin
 		shoot_in = ~(KEY[3]) || (keycode == 8'd44); 
+		left_in = ~(KEY[2]) || (keycode == 8'd80);
+		right_in = ~(KEY[1]) || (keycode == 8'd79);
 	end
     
     logic [1:0] hpi_addr;
