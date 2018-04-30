@@ -36,12 +36,12 @@ module color_mapper_end (input is_won, is_lost,                                /
 			Green = 8'hff;
 			Blue = 8'hff;
 		end
-		else if (DistY == 0 && DistX <= 4 && DistX >= -4) begin
+		else if (DistY == 0 && DistX <= 3 && DistX >= -3) begin
 			Red = 8'hff;
 			Green = 8'hff;
 			Blue = 8'hff;
 		end
-		else if (DistY >= -3 && DistY <= -1 && DistX <= 5 && DistX >= -5) begin
+		else if (DistY >= -3 && DistY <= -1 && DistX <= 4 && DistX >= -4) begin
 			Red = 8'hff;
 			Green = 8'hff;
 			Blue = 8'hff;
