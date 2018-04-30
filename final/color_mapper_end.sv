@@ -47,7 +47,7 @@ module color_mapper_end (input is_won, is_lost,                                /
 			Blue = 8'hff;
 		end
 		else if (DistY >= -3 && DistY <= -1 && DistX <= 4 && DistX >= -4) begin
-			if (DrawX >= 312 && DrawX <= 319 && DrawY >= 240 && DrawY <= 247) begin
+			if (DrawX >= 312 && DrawX <= 319 && DrawY >= 240 && DrawY <= 255) begin
 				diffY = DrawY - 240;
 				addr = diffY + (ones << 4);
 				diffX = DrawX - 312;
@@ -63,7 +63,7 @@ module color_mapper_end (input is_won, is_lost,                                /
 					Black = 8'hff;
 				end
 			end
-			else if (DrawX >= 320 && DrawX <= 327 && DrawY >= 240 && DrawY <= 247) begin
+			else if (DrawX >= 320 && DrawX <= 327 && DrawY >= 240 && DrawY <= 255) begin
 				diffY = DrawY - 240;
 				addr = diffY + (tens << 4);
 				diffX = DrawX - 320;
