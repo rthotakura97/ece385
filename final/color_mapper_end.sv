@@ -7,6 +7,7 @@ module color_mapper_end (input is_won, is_lost,                                /
 	parameter playerCenterX = 320;
 	parameter playerCenterY = 240;
     logic [7:0] Red, Green, Blue;
+	logic [7:0] addr, data;
     
     // Output colors to VGA
     assign VGA_R = Red;
@@ -15,6 +16,10 @@ module color_mapper_end (input is_won, is_lost,                                /
 	int tens, ones;
 	int DistX, DistY;
 	int DistXtemp, DistYtemp;
+	int diffX,diffY;
+
+	font_rom fonts(.*);
+	logic should_draw;
     
 	// x312 - 328
 	//
@@ -42,9 +47,43 @@ module color_mapper_end (input is_won, is_lost,                                /
 			Blue = 8'hff;
 		end
 		else if (DistY >= -3 && DistY <= -1 && DistX <= 4 && DistX >= -4) begin
-			Red = 8'hff;
-			Green = 8'hff;
-			Blue = 8'hff;
+			if (DrawX >= 312 && DrawX <= 319 && DrawY >= 240 && DrawY <= 247) begin
+				diffY = DrawY - 240;
+				addr = diffY + (ones << 4);
+				diffX = DrawX - 312;
+				should_draw = data[8-diffX];
+				if (should_draw) begin
+					Red = 8'h0;
+					Green = 8'h0;
+					Black = 8'h0;
+				end
+				else begin
+					Red = 8'hff;
+					Green = 8'hff;
+					Black = 8'hff;
+				end
+			end
+			else if (DrawX >= 320 && DrawX <= 327 && DrawY >= 240 && DrawY <= 247) begin
+				diffY = DrawY - 240;
+				addr = diffY + (tens << 4);
+				diffX = DrawX - 320;
+				should_draw = data[8-diffX];
+				if (should_draw) begin
+					Red = 8'h0;
+					Green = 8'h0;
+					Black = 8'h0;
+				end
+				else begin
+					Red = 8'hff;
+					Green = 8'hff;
+					Black = 8'hff;
+				end
+			end
+			else begin
+				Red = 8'hff;
+				Green = 8'hff;
+				Blue = 8'hff;
+			end
 		end
 		else if(is_won)
 		begin
